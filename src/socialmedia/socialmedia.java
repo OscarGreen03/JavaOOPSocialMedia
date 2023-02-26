@@ -89,7 +89,9 @@ public class socialmedia implements SocialMediaPlatform{
     }
 
     @Override
-    public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {}
+    public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
+
+    }
 
     @Override
     public int getNumberOfAccounts() {
