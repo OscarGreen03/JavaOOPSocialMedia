@@ -1,8 +1,4 @@
-import socialmedia.AccountIDNotRecognisedException;
-import socialmedia.BadSocialMedia;
-import socialmedia.IllegalHandleException;
-import socialmedia.InvalidHandleException;
-import socialmedia.SocialMediaPlatform;
+import socialmedia.*;
 
 /**
  * A short program to illustrate an app testing some minimal functionality of a
@@ -21,10 +17,12 @@ public class SocialMediaPlatformTestApp {
 	 * 
 	 * @param args not used
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InvalidPostException {
 		System.out.println("The system compiled and started the execution...");
 
-		SocialMediaPlatform platform = new BadSocialMedia();
+		SocialMediaPlatform platform = new socialmedia();
+		Post post = new Post("123", "Hello world", "p");
+
 
 
 		assert (platform.getNumberOfAccounts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
@@ -60,6 +58,10 @@ public class SocialMediaPlatformTestApp {
 		assert (platform.getTotalOriginalPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
 		assert (platform.getTotalCommentPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
 		assert (platform.getTotalEndorsmentPosts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
+
+		//test pushing a post
+
+
 
 	}
 
