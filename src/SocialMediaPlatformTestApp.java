@@ -21,7 +21,13 @@ public class SocialMediaPlatformTestApp {
 		System.out.println("The system compiled and started the execution...");
 
 		SocialMediaPlatform platform = new socialmedia();
-		Post post = new Post("123", "Hello world", "p");
+		Post post = new Post("123", "Oscar_G", "Hello World", "c");
+		PostDatabase postDatabase = new PostDatabase();
+		postDatabase.addPost(post);
+		System.out.println(postDatabase);
+		postDatabase.iteratePosts();
+
+
 
 
 
