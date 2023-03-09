@@ -1,12 +1,12 @@
 import socialmedia.*;
 
+import java.io.*;
 import java.util.Scanner;
 /**
  * A short program to illustrate an app testing some minimal functionality of a
  * concrete implementation of the SocialMediaPlatform interface -- note you will
  * want to increase these checks, and run it on your SocialMedia class (not the
  * BadSocialMedia class).
- *
  * 
  * @author Diogo Pacheco
  * @version 1.0
@@ -18,31 +18,23 @@ public class SocialMediaPlatformTestApp {
 	 * 
 	 * @param args not used
 	 */
-	public static void main(String[] args) throws InvalidPostException {
+	public static void main(String[] args) throws InvalidPostException, IOException, ClassNotFoundException {
 		System.out.println("The system compiled and started the execution...");
 
 		SocialMediaPlatform platform = new socialmedia();
 
 		// create database
-		PostDatabase postDatabase = new PostDatabase();
-		Scanner scanner = new Scanner(System.in);
-		while (true) {
-			System.out.println("Enter ur username");
-			String username = scanner.nextLine();
-			System.out.println("Enter the message text");
-			String message = scanner.nextLine();
-			System.out.println("Enter the type of post");
-			String type = scanner.nextLine();
-			Post newPost = new Post(username, message, type);
-			postDatabase.addPost(newPost);
 
-			postDatabase.iteratePosts();
+		//Scanner scanner = new Scanner(System.in);
 
-			if (username == "exit") {
-				break;
-			}
+		PostDatabase postDatabase = getDatabase();
+		// iterate for loop for 5
+		for (int i = 0; i < 100000; i++) {
+			postDatabase.addPost(new Post("handle" + i, "message" + i, "c"));
 		}
 
+
+		serializeDatabase(postDatabase);
 
 
 
@@ -87,4 +79,38 @@ public class SocialMediaPlatformTestApp {
 
 	}
 
+	private static void serializeDatabase(PostDatabase postDatabase) throws IOException {
+		try {
+			FileOutputStream file = new FileOutputStream("postDatabase.ser");
+			ObjectOutputStream out = new ObjectOutputStream(file);
+
+			out.writeObject(postDatabase);
+			out.close();
+			file.close();
+			System.out.println("Object has been serialized");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private static PostDatabase getDatabase() throws IOException, ClassNotFoundException, InvalidPostException {
+		try{
+			FileInputStream file = new FileInputStream("postDatabase.ser");
+			ObjectInputStream in = new ObjectInputStream(file);
+			PostDatabase postDatabase = (PostDatabase) in.readObject();
+
+			in.close();
+			file.close();
+
+			return postDatabase;
+		}
+		catch (FileNotFoundException e){
+			System.out.println("File not found, Creating new database");
+			return new PostDatabase();
+		}
+
+
+	}
 }
+

@@ -6,6 +6,8 @@ public class Post implements Serializable {
 
     private String userHandle;
     private String message;
+    private String type;
+    private int parentID;
     private ArrayList<Integer> Children;
         // postid must be valid
         // userid must be valid
@@ -15,23 +17,27 @@ public class Post implements Serializable {
 
     public Post(String userhandle, String message, String type) throws InvalidPostException {
         //Used only for creating a post, parentid and input for verifyPost is sanitized and normalised or whatever its called
-        verifyPost( userhandle, message, type, null);
+        verifyPost( userhandle, message, type, 0);
     }
 
-    public Post( String userhandle, String message, String type, String parentid) throws InvalidPostException {
+    public Post( String userhandle, String message, String type, Integer parentid) throws InvalidPostException {
         //This Constructor is used for when a post is a comment or an endorsement
         verifyPost( userhandle, message, type, parentid);
     }
 
-    private boolean verifyPost( String userhandle, String message, String type, String parentid) throws InvalidPostException {
+    private boolean verifyPost( String userhandle, String message, String type, Integer parentid) throws InvalidPostException {
 
-        System.out.println("User ID: " + userhandle);
-        System.out.println("Message: " + message);
-        System.out.println("Type: " + type);
-        System.out.println("Parent ID: " + parentid);
+
+
 
         this.userHandle = userhandle;
         this.message = message;
+        this.type = type;
+
+       // check if parentid is not 0 else don't declare
+        if (parentid != 0){
+            this.parentID = parentid;
+        }
 
         // check parentid is not null
 
@@ -42,7 +48,10 @@ public class Post implements Serializable {
             //raise InvalidPostException
             throw new InvalidPostException("Message is too long");
         }
-        if (type.equals("p")){
+        if (true){
+            int i = 1;
+        }
+        else if (type.equals("p")){
             System.out.println("Post");
         }
         else if (type.equals("c")){
@@ -58,7 +67,11 @@ public class Post implements Serializable {
     }
 
     public String ReturnPostContent(){
-        return this.message;
+        return "\nUser Handle: " + this.userHandle + " \nMessage: " + this.message + "\n Type: " + this.type;
+    }
+
+    public void addChildren(int childID){
+        this.Children.add(childID);
     }
     public ArrayList ReturnPostChildren(){
         return this.Children;
