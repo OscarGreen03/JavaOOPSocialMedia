@@ -1,5 +1,6 @@
 import socialmedia.*;
 
+import java.util.Scanner;
 /**
  * A short program to illustrate an app testing some minimal functionality of a
  * concrete implementation of the SocialMediaPlatform interface -- note you will
@@ -21,11 +22,26 @@ public class SocialMediaPlatformTestApp {
 		System.out.println("The system compiled and started the execution...");
 
 		SocialMediaPlatform platform = new socialmedia();
-		Post post = new Post("123", "Oscar_G", "Hello World", "c");
+
+		// create database
 		PostDatabase postDatabase = new PostDatabase();
-		postDatabase.addPost(post);
-		System.out.println(postDatabase);
-		postDatabase.iteratePosts();
+		Scanner scanner = new Scanner(System.in);
+		while (true) {
+			System.out.println("Enter ur username");
+			String username = scanner.nextLine();
+			System.out.println("Enter the message text");
+			String message = scanner.nextLine();
+			System.out.println("Enter the type of post");
+			String type = scanner.nextLine();
+			Post newPost = new Post(username, message, type);
+			postDatabase.addPost(newPost);
+
+			postDatabase.iteratePosts();
+
+			if (username == "exit") {
+				break;
+			}
+		}
 
 
 

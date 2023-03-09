@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class PostDatabase implements Serializable {
 
-    private static Map<String, Post> postDatabase = new HashMap<String, Post>();
+    private static Map<Integer, Post> postDatabase = new HashMap<Integer, Post>();
     public PostDatabase() throws InvalidPostException {
         // Create a new map
         // string is the User Handle
@@ -19,9 +19,12 @@ public class PostDatabase implements Serializable {
         // String is PostID, Post is the post object and all
 
     }
-    public boolean  addPost(Post post) throws InvalidPostException {
+    public boolean addPost(Post post) throws InvalidPostException {
+        // generate new post id
+        // add post to map
+        int postID = generatePostID();
         try {
-            postDatabase.put(post.getPostID(), post);
+            postDatabase.put(postID, post);
             return true;
         }
         catch (Exception e){
@@ -31,12 +34,18 @@ public class PostDatabase implements Serializable {
         }
     }
     public void iteratePosts(){
-        for (Map.Entry<String, Post> entry : postDatabase.entrySet()) {
+        for (Map.Entry<Integer, Post> entry : postDatabase.entrySet()) {
             System.out.println("Key = " + entry.getKey() +
                     ", Value = " + entry.getValue().ReturnPostContent());
         }
-
     }
+    private int generatePostID(){
+        // check the last string generated (by checking hash map)
+        // add 1 to last string as int and convert back
 
+        // check length of postDatabase, if 0 then return 1
+
+        return (postDatabase.size() + 1);
+    }
 
     }
