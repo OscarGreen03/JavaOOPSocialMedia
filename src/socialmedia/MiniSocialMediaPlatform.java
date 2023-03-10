@@ -44,7 +44,7 @@ public interface MiniSocialMediaPlatform extends Serializable {
 	 * @throws AccountIDNotRecognisedException if the ID does not match to any
 	 *                                         account in the system.
 	 */
-	void removeAccount(int id) throws AccountIDNotRecognisedException;
+	void removeAccount(int id) throws AccountIDNotRecognisedException, PostIDNotRecognisedException;
 
 	/**
 	 * The method replaces the oldHandle of an account by the newHandle.

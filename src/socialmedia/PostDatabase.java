@@ -52,8 +52,24 @@ public class PostDatabase implements Serializable {
         // add 1 to last string as int and convert back
 
         // check length of postDatabase, if 0 then return 1
-        return postDatabase.size() + 1;
+        // else return the last key + 1
+        int lastKey = 0;
+        for (Map.Entry<Integer, Post> entry : postDatabase.entrySet()) {
+            lastKey = entry.getKey();
+        }
+        return lastKey + 1;
 
+    }
+    public void deletePost(int postID) throws PostIDNotRecognisedException {
+        // check if postID is in the map
+        // if it is then remove it
+        // if it isn't then raise PostIDNotRecognisedException
+        if (postDatabase.containsKey(postID)){
+            postDatabase.remove(postID);
+        }
+        else{
+            throw new PostIDNotRecognisedException("Post ID: " + postID + " not recognised");
+        }
     }
 
 

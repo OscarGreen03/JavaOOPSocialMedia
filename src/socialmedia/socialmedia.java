@@ -1,16 +1,29 @@
 package socialmedia;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class socialmedia implements SocialMediaPlatform{
+    private AccountDatabase accountDatabase = new AccountDatabase();
+    private PostDatabase postDatabase = new PostDatabase();
+
+    public socialmedia() throws InvalidPostException {
+    }
+
+
     @Override
     public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
-        return 0;
+        return this.accountDatabase.createAccount(handle);
     }
 
     @Override
-    public void removeAccount(int id) throws AccountIDNotRecognisedException {
+    public void removeAccount(int id) throws AccountIDNotRecognisedException, PostIDNotRecognisedException {
+        ArrayList<Integer> posts = this.accountDatabase.getPostsForAccount(id);
+        for (int postID : posts){
+            this.postDatabase.deletePost(postID);
+        }
 
+        this.accountDatabase.removeAccount(id);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class SocialMediaPlatformTestApp {
 	 * 
 	 * @param args not used
 	 */
-	public static void main(String[] args) throws InvalidPostException, IOException, ClassNotFoundException {
+	public static void main(String[] args) throws InvalidPostException, IOException, ClassNotFoundException, PostIDNotRecognisedException {
 		System.out.println("The system compiled and started the execution...");
 
 		SocialMediaPlatform platform = new socialmedia();
@@ -29,9 +29,12 @@ public class SocialMediaPlatformTestApp {
 
 		PostDatabase postDatabase = getDatabase();
 		// iterate for loop for 5
-		for (int i = 0; i < 100000; i++) {
+		for (int i = 0; i < 10; i++) {
 			postDatabase.addPost(new Post("handle" + i, "message" + i, "c"));
 		}
+		postDatabase.deletePost(5);
+		postDatabase.iteratePosts();
+
 
 
 		serializeDatabase(postDatabase);
