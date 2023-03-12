@@ -88,4 +88,9 @@ public class AccountDatabase implements Serializable {
     public void addPostByID(int accountID, int postID){
         accountDatabase.get(accountID).addPost(postID);
     }
+
+    public void updateAccountDescription(String handle, String description) throws IllegalHandleException {
+        int accountID = handleToID.get(handle);
+        accountDatabase.get(accountID).setDescription(description);
+    }
 }

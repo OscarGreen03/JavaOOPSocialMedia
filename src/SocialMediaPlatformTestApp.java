@@ -25,10 +25,7 @@ public class SocialMediaPlatformTestApp {
 
 		//Scanner scanner = new Scanner(System.in);
 
-		PostDatabase postDatabase = getDatabase();
-		for (int i = 0; i < 10; i++) {
-			postDatabase.addPost(new Post("handle" + i, "message" + i, "c"));
-		}
+
 		//postDatabase.iteratePosts();
 
 		int handle1 = platform.createAccount("Handle1");
@@ -44,9 +41,9 @@ public class SocialMediaPlatformTestApp {
 
 
 
-		System.out.println(platform.getTotalOriginalPosts());
-		System.out.println(platform.getTotalCommentPosts());
-		System.out.println(platform.getTotalEndorsmentPosts());
+		//System.out.println(platform.getTotalOriginalPosts());
+		//System.out.println(platform.getTotalCommentPosts());
+		//System.out.println(platform.getTotalEndorsmentPosts());
 
 
 		assert (platform.getNumberOfAccounts() == 0) : "Innitial SocialMediaPlatform not empty as required.";

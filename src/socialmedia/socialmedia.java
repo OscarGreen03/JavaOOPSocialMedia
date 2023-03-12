@@ -105,8 +105,8 @@ public class socialmedia implements SocialMediaPlatform{
     }
 
     @Override
-    public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException {
-
+    public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException, IllegalHandleException {
+            this.accountDatabase.updateAccountDescription(handle, description);
     }
 
     @Override

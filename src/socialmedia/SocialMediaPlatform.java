@@ -56,7 +56,7 @@ public interface SocialMediaPlatform extends MiniSocialMediaPlatform {
 	 * @throws HandleNotRecognisedException if the handle does not match to any
 	 *                                      account in the system.
 	 */
-	void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException;
+	void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException,  IllegalHandleException;
 
 	// End Post-related methods ****************************************
 
