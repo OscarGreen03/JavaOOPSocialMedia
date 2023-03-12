@@ -11,12 +11,15 @@ public class AccountDatabase implements Serializable {
     private static final long serialVersionUID = 983484;
     public Map<Integer, Account> accountDatabase = new HashMap<>();
 
+    private Map<String, Integer> handleToID = new HashMap<>();
+
     public boolean addAccount(Account account) {
         // generate new account id
         // add account to map
         int accountID = generateAccountID();
         try {
             accountDatabase.put(accountID, account);
+            handleToID.put(account.getHandle(), accountID);
             return true;
         }
         catch (Exception e){
@@ -43,6 +46,7 @@ public class AccountDatabase implements Serializable {
             int handleID = generateAccountID();
             Account account = new Account(handle, handleID);
             accountDatabase.put(handleID, account);
+            handleToID.put(handle, handleID);
             return handleID;
         }
         else{
@@ -74,5 +78,14 @@ public class AccountDatabase implements Serializable {
     }
     public Integer AccountSize(){
         return accountDatabase.size();
+    }
+    public void addPostToAccount(String handle, int postID) throws IllegalHandleException {
+        int accountID = handleToID.get(handle);
+        addPostByID(accountID, postID);
+
+    }
+
+    public void addPostByID(int accountID, int postID){
+        accountDatabase.get(accountID).addPost(postID);
     }
 }

@@ -37,8 +37,11 @@ public class socialmedia implements SocialMediaPlatform{
     }
 
     @Override
-    public int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException {
-        return 0;
+    public int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException, IllegalHandleException {
+        Post newPost = new Post(handle, message, "c");
+        int postID = this.postDatabase.addPost(newPost);
+        this.accountDatabase.addPostToAccount(handle, postID);
+        return postID;
     }
 
     @Override
@@ -114,6 +117,7 @@ public class socialmedia implements SocialMediaPlatform{
     @Override
     public int getTotalOriginalPosts() {
         ArrayList<String> postTypes = this.postDatabase.getPostTypes();
+        //System.out.println(postTypes);
         int count = 0;
         for (String postType : postTypes){
             if (postType.equals("p")){

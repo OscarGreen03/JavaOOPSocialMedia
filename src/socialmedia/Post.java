@@ -78,7 +78,8 @@ public class Post implements Serializable {
     }
 
     public String getType() {
-        return type;
+        //System.out.println("Post Type: " + this.type);
+        return this.type;
     }
 }
 

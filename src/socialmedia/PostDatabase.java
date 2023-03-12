@@ -24,7 +24,7 @@ public class PostDatabase implements Serializable {
         // String is PostID, Post is the post object and all
 
     }
-    public boolean addPost(Post post) throws InvalidPostException {
+    public int addPost(Post post) throws InvalidPostException {
         // generate new post id
         // add post to map
         int postID = generatePostID();
@@ -33,7 +33,7 @@ public class PostDatabase implements Serializable {
             // print both postid and post
 
             postDatabase.put(postID, post);
-            return true;
+            return postID;
         }
         catch (Exception e){
             // print stack trace
@@ -74,6 +74,8 @@ public class PostDatabase implements Serializable {
     }
 
 
+
+
     public void testfunc(){
         System.out.println("Test Func");
     }
@@ -83,6 +85,7 @@ public class PostDatabase implements Serializable {
         for (Map.Entry<Integer, Post> entry : postDatabase.entrySet()) {
             postTypes.add(entry.getValue().getType());
         }
-    return postTypes;
+        //System.out.println(postTypes);
+        return postTypes;
     }
 }

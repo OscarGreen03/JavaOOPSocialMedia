@@ -18,7 +18,7 @@ public class SocialMediaPlatformTestApp {
 	 * 
 	 * @param args not used
 	 */
-	public static void main(String[] args) throws InvalidPostException, IOException, ClassNotFoundException, PostIDNotRecognisedException {
+	public static void main(String[] args) throws InvalidPostException, IOException, ClassNotFoundException, PostIDNotRecognisedException, IllegalHandleException, InvalidHandleException, HandleNotRecognisedException {
 		System.out.println("The system compiled and started the execution...");
 
 		SocialMediaPlatform platform = new socialmedia();
@@ -29,11 +29,24 @@ public class SocialMediaPlatformTestApp {
 		for (int i = 0; i < 10; i++) {
 			postDatabase.addPost(new Post("handle" + i, "message" + i, "c"));
 		}
-		postDatabase.iteratePosts();
+		//postDatabase.iteratePosts();
 
-		serializeDatabase(postDatabase);
+		int handle1 = platform.createAccount("Handle1");
+		int handle2 = platform.createAccount("Handle2");
+		int handle3 = platform.createAccount("Handle3");
+
+		int post1 = platform.createPost("Handle1", "Message1");
+		int post2 = platform.createPost("Handle2", "Message2");
+		int post3 = platform.createPost("Handle3", "Message3");
 
 
+
+
+
+
+		System.out.println(platform.getTotalOriginalPosts());
+		System.out.println(platform.getTotalCommentPosts());
+		System.out.println(platform.getTotalEndorsmentPosts());
 
 
 		assert (platform.getNumberOfAccounts() == 0) : "Innitial SocialMediaPlatform not empty as required.";

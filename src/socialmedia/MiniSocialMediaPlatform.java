@@ -102,7 +102,7 @@ public interface MiniSocialMediaPlatform extends Serializable {
 	 *                                      100 characters.
 	 * @return the sequential ID of the created post.
 	 */
-	int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException;
+	int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException, IllegalHandleException;
 
 	/**
 	 * The method creates an endorsement post of an existing post, similar to a
