@@ -108,21 +108,45 @@ public class socialmedia implements SocialMediaPlatform{
 
     @Override
     public int getNumberOfAccounts() {
-        return 0;
+        return this.accountDatabase.AccountSize();
     }
 
     @Override
     public int getTotalOriginalPosts() {
-        return 0;
+        ArrayList<String> postTypes = this.postDatabase.getPostTypes();
+        int count = 0;
+        for (String postType : postTypes){
+            if (postType.equals("p")){
+                count++;
+            }
+        }
+
+        return count;
     }
 
     @Override
     public int getTotalEndorsmentPosts() {
-        return 0;
+        ArrayList<String> postTypes = this.postDatabase.getPostTypes();
+        int count = 0;
+        for (String postType : postTypes){
+            if (postType.equals("e")){
+                count++;
+            }
+        }
+
+        return count;
     }
 
     @Override
     public int getTotalCommentPosts() {
-        return 0;
+        ArrayList<String> postTypes = this.postDatabase.getPostTypes();
+        int count = 0;
+        for (String postType : postTypes){
+            if (postType.equals("c")){
+                count++;
+            }
+        }
+
+        return count;
     }
 }

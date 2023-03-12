@@ -3,6 +3,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 // java map import
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -75,5 +76,13 @@ public class PostDatabase implements Serializable {
 
     public void testfunc(){
         System.out.println("Test Func");
+    }
+
+    public ArrayList<String> getPostTypes(){
+        ArrayList<String> postTypes = new ArrayList<>();
+        for (Map.Entry<Integer, Post> entry : postDatabase.entrySet()) {
+            postTypes.add(entry.getValue().getType());
+        }
+    return postTypes;
     }
 }

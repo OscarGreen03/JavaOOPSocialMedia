@@ -23,19 +23,13 @@ public class SocialMediaPlatformTestApp {
 
 		SocialMediaPlatform platform = new socialmedia();
 
-		// create database
-
 		//Scanner scanner = new Scanner(System.in);
 
 		PostDatabase postDatabase = getDatabase();
-		// iterate for loop for 5
 		for (int i = 0; i < 10; i++) {
 			postDatabase.addPost(new Post("handle" + i, "message" + i, "c"));
 		}
-		postDatabase.deletePost(5);
 		postDatabase.iteratePosts();
-
-
 
 		serializeDatabase(postDatabase);
 

@@ -72,4 +72,7 @@ public class AccountDatabase implements Serializable {
         }
         return true;
     }
+    public Integer AccountSize(){
+        return accountDatabase.size();
+    }
 }

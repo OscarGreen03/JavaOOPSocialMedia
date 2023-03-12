@@ -76,5 +76,9 @@ public class Post implements Serializable {
     public ArrayList ReturnPostChildren(){
         return this.Children;
     }
+
+    public String getType() {
+        return type;
+    }
 }
 
