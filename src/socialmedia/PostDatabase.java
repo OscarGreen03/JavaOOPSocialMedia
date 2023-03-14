@@ -89,4 +89,13 @@ public class PostDatabase implements Serializable {
     public String getPostType(int id){
         return postDatabase.get(id).getType();
     }
+    public boolean validatePostID(int id) throws PostIDNotRecognisedException {
+        if (!postDatabase.containsKey(id)) {
+            return false;
+        }
+        return true;
+    }
+    public void addEndorsementToPost(int postID, int endorserID){
+        postDatabase.get(postID).addEndorsement(endorserID);
+    }
 }

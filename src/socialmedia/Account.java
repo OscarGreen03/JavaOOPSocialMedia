@@ -8,6 +8,8 @@ public class Account {
     private int id;
     private ArrayList<Integer> posts = new ArrayList<>();
 
+    private ArrayList<Integer> endorsedAccounts = new ArrayList<>();
+
     public Account(String handle, String description, int id) {
         this.handle = handle;
         this.description = description;
@@ -50,4 +52,12 @@ public class Account {
     public ArrayList<Integer> getPosts() {
         return this.posts;
     }
+
+    public void addEndorsement(int id){
+        endorsedAccounts.add(id);
+    }
+    public ArrayList<Integer> getEndorsedAccounts(){
+        return this.endorsedAccounts;
+    }
+
 }

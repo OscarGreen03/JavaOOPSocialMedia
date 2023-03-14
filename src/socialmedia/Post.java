@@ -8,7 +8,8 @@ public class Post implements Serializable {
     private String message;
     private String type;
     private int parentID;
-    private ArrayList<Integer> Children;
+    private ArrayList<Integer> endorsements = new ArrayList<>();
+    private ArrayList<Integer> children;
         // postid must be valid
         // userid must be valid
         // we can check message
@@ -21,10 +22,14 @@ public class Post implements Serializable {
     }
 
     public Post( String userhandle, String message, String type, Integer parentid) throws InvalidPostException {
-        //This Constructor is used for when a post is a comment or an endorsement
+        //This Constructor is used for when a post is a comment
         verifyPost( userhandle, message, type, parentid);
     }
 
+    public Post (String userhandle, String type, Integer parentid) throws InvalidPostException {
+        //This constructor is used for when a post is a endorsement as no message is needed
+        verifyPost( userhandle, "", type, parentid);
+    }
     private boolean verifyPost( String userhandle, String message, String type, Integer parentid) throws InvalidPostException {
 
 
@@ -48,17 +53,15 @@ public class Post implements Serializable {
             //raise InvalidPostException
             throw new InvalidPostException("Message is too long");
         }
-        if (true){
-            int i = 1;
-        }
-        else if (type.equals("p")){
-            System.out.println("Post");
+
+        if (type.equals("p")){
+            //System.out.println("Post");
         }
         else if (type.equals("c")){
-            System.out.println("Comment");
+            //System.out.println("Comment");
         }
         else if (type.equals("e")){
-            System.out.println("Endorsement");
+            //System.out.println("Endorsement");
         }
         else{
             throw new InvalidPostException("Invalid Post Type");
@@ -71,15 +74,21 @@ public class Post implements Serializable {
     }
 
     public void addChildren(int childID){
-        this.Children.add(childID);
+        this.children.add(childID);
     }
     public ArrayList ReturnPostChildren(){
-        return this.Children;
+        return this.children;
     }
 
     public String getType() {
         //System.out.println("Post Type: " + this.type);
         return this.type;
+    }
+    public void addEndorsement(int EndorsingAccount){
+        this.endorsements.add(EndorsingAccount);
+    }
+    public ArrayList getEndorsements(){
+        return this.endorsements;
     }
 }
 

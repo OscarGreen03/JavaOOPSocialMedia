@@ -66,10 +66,8 @@ public class AccountDatabase implements Serializable {
 
     }
     public boolean validateHandle(String handle){
-        for (Map.Entry<Integer, Account> entry : accountDatabase.entrySet()) {
-            if (entry.getValue().getHandle().equals(handle)){
-                return false;
-            }
+        if (handleToID.containsKey(handle)){
+            return false;
         }
         return true;
     }
@@ -110,6 +108,10 @@ public class AccountDatabase implements Serializable {
         catch (Exception e){
             throw new HandleNotRecognisedException("The handle does not have a corresponding ID");
         }
+    }
+    public void addEndorsementToAccount(String handle, int endorsementID)  {
+        int accountID = handleToID.get(handle);
+        accountDatabase.get(accountID).addEndorsement(endorsementID);
     }
 
 }

@@ -68,8 +68,21 @@ public class socialmedia implements SocialMediaPlatform{
     }
 
     @Override
-    public int endorsePost(String handle, int id) throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException {
-        return 0;
+    public int endorsePost(String handle, int parentID) throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException, InvalidPostException {
+        if (!accountDatabase.validateHandle(handle)) {
+            throw new HandleNotRecognisedException();
+        }
+        else if (!postDatabase.validatePostID(parentID)) {
+            throw new PostIDNotRecognisedException();
+        }
+
+        Post post = new Post(handle, "e", parentID);
+        int endorsementID = postDatabase.addPost(post);
+        // endorsements work by adding the postID of the endorsement to the post being endorsed
+        postDatabase.addEndorsementToPost(parentID, endorsementID);
+        // endorsements also add the endorsed postID to the account that made the endorsement
+        accountDatabase.addEndorsementToAccount(handle, parentID);
+        return endorsementID;
     }
 
     @Override
