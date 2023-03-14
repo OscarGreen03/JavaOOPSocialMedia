@@ -13,6 +13,7 @@ public class PostDatabase implements Serializable {
     @Serial
     private static final long serialVersionUID = 245345;
     public Map<Integer, Post> postDatabase = new HashMap<>();
+    private Integer lastID = 0;
     public PostDatabase() throws InvalidPostException {
         // Create a new map
         // string is the User Handle
@@ -54,11 +55,8 @@ public class PostDatabase implements Serializable {
 
         // check length of postDatabase, if 0 then return 1
         // else return the last key + 1
-        int lastKey = 0;
-        for (Map.Entry<Integer, Post> entry : postDatabase.entrySet()) {
-            lastKey = entry.getKey();
-        }
-        return lastKey + 1;
+        lastID += 1;
+        return lastID;
 
     }
     public void deletePost(int postID) throws PostIDNotRecognisedException {
@@ -87,5 +85,8 @@ public class PostDatabase implements Serializable {
         }
         //System.out.println(postTypes);
         return postTypes;
+    }
+    public String getPostType(int id){
+        return postDatabase.get(id).getType();
     }
 }

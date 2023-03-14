@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class AccountDatabase implements Serializable {
     @Serial
     private static final long serialVersionUID = 983484;
-    public Map<Integer, Account> accountDatabase = new HashMap<>();
-
+    private Map<Integer, Account> accountDatabase = new HashMap<>();
+    private Integer lastID = 0;
     private Map<String, Integer> handleToID = new HashMap<>();
 
     public boolean addAccount(Account account) {
@@ -34,11 +34,8 @@ public class AccountDatabase implements Serializable {
         // get last element in the maps key
         // add 1 to it
 
-        int lastKey = 0;
-        for (Map.Entry<Integer, Account> entry : accountDatabase.entrySet()) {
-            lastKey = entry.getKey();
-        }
-        return lastKey + 1;
+        lastID += 1;
+        return lastID;
 
     }
     public Integer createAccount(String handle) throws IllegalHandleException {
@@ -93,4 +90,26 @@ public class AccountDatabase implements Serializable {
         int accountID = handleToID.get(handle);
         accountDatabase.get(accountID).setDescription(description);
     }
+    public void updateHandle(String oldhandle, String newhandle) throws IllegalHandleException {
+        if (oldhandle.equals(newhandle)) {
+            throw new IllegalHandleException("The new handle is the same as the old handle");
+        }else if (!validateHandle(newhandle)) {
+            throw new IllegalHandleException("The new handle already exists in the database");
+        }else {
+        int accountID = handleToID.get(oldhandle);
+        accountDatabase.get(accountID).setHandle(newhandle);
+        handleToID.remove(oldhandle);
+        handleToID.put(newhandle, accountID);
+        }
+    }
+    public String getDescription(int id){
+        return accountDatabase.get(id).getDescription();
+    }
+    public int getAccountID(String handle) throws HandleNotRecognisedException {
+        try{return handleToID.get(handle);}
+        catch (Exception e){
+            throw new HandleNotRecognisedException("The handle does not have a corresponding ID");
+        }
+    }
+
 }

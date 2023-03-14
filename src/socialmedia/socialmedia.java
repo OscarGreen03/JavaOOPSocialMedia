@@ -28,12 +28,35 @@ public class socialmedia implements SocialMediaPlatform{
 
     @Override
     public void changeAccountHandle(String oldHandle, String newHandle) throws HandleNotRecognisedException, IllegalHandleException, InvalidHandleException {
-
+        this.accountDatabase.updateHandle(oldHandle, newHandle);
     }
 
     @Override
     public String showAccount(String handle) throws HandleNotRecognisedException {
-        return null;
+        int accountID = this.accountDatabase.getAccountID(handle);
+        String description = this.accountDatabase.getDescription(accountID);
+        ArrayList<Integer> posts = this.accountDatabase.getPostsForAccount(accountID);
+        ArrayList<String> postTypes = new ArrayList<>();
+        for (int postID : posts){
+            postTypes.add(this.postDatabase.getPostType(postID));
+        }
+        int postCount = posts.size();
+        int endorsementCount = 0;
+        for (String postType : postTypes){
+            if(postType.equals("e")){
+                endorsementCount++;
+            }
+        }
+
+
+        String formattedString = "<pre>\n" +
+                "ID: " + accountID + "\n" +
+                "Handle: " + handle + "\n" +
+                "Description: " + description + "\n" +
+                "Post count: " + postCount + "\n" +
+                "</pre>";
+        return formattedString;
+                // need to do endorsement count
     }
 
     @Override
@@ -105,7 +128,7 @@ public class socialmedia implements SocialMediaPlatform{
     }
 
     @Override
-    public void updateAccountDescription(String handle, String description) throws HandleNotRecognisedException, IllegalHandleException {
+    public void updateAccountDescription(String handle, String description) throws IllegalHandleException {
             this.accountDatabase.updateAccountDescription(handle, description);
     }
 
