@@ -30,6 +30,12 @@ public class Post implements Serializable {
         //This constructor is used for when a post is a endorsement as no message is needed
         verifyPost( userhandle, "", type, parentid);
     }
+
+    public Post(){
+        this.message = "The original content was removed from the system and is no longer available.";
+        this.userHandle = "Null";
+        this.type = "x";// this is the constructor for nullpost, which will be pointed to by the parent of a post that has no parent (been deleted)
+    }
     private boolean verifyPost( String userhandle, String message, String type, Integer parentid) throws InvalidPostException {
 
 
@@ -76,10 +82,12 @@ public class Post implements Serializable {
     public void addChildren(int childID){
         this.children.add(childID);
     }
-    public ArrayList ReturnPostChildren(){
+    public ArrayList getChildren(){
         return this.children;
     }
-
+    public void removeChildren(int childID){
+        this.children.remove(childID);
+    }
     public String getType() {
         //System.out.println("Post Type: " + this.type);
         return this.type;
@@ -89,6 +97,10 @@ public class Post implements Serializable {
     }
     public ArrayList getEndorsements(){
         return this.endorsements;
+    }
+
+    public void setParent(int id){
+        this.parentID = id;
     }
 }
 

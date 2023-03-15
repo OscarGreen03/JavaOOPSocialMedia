@@ -104,9 +104,13 @@ public class AccountDatabase implements Serializable {
         return accountDatabase.get(id).getDescription();
     }
     public int getAccountID(String handle) throws HandleNotRecognisedException {
-        try{return handleToID.get(handle);}
+        try{
+            return handleToID.get(handle);
+        }
         catch (Exception e){
+            System.out.println(e);
             throw new HandleNotRecognisedException("The handle does not have a corresponding ID");
+
         }
     }
     public void addEndorsementToAccount(String handle, int endorsementID)  {

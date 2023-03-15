@@ -15,15 +15,8 @@ public class PostDatabase implements Serializable {
     public Map<Integer, Post> postDatabase = new HashMap<>();
     private Integer lastID = 0;
     public PostDatabase() throws InvalidPostException {
-        // Create a new map
-        // string is the User Handle
-
-        // add random posts to the map
-        System.out.println("PostDatabase Constructor");
-        //this.postDatabase = new HashMap<Integer, Post>();
-
-        // String is PostID, Post is the post object and all
-
+        Post nullPost = new Post();
+        postDatabase.put(-1, nullPost);
     }
     public int addPost(Post post) throws InvalidPostException {
         // generate new post id
@@ -63,19 +56,17 @@ public class PostDatabase implements Serializable {
         // check if postID is in the map
         // if it is then remove it
         // if it isn't then raise PostIDNotRecognisedException
+
         if (postDatabase.containsKey(postID)){
+            ArrayList children = postDatabase.get(postID).getChildren();
+            for (Object child : children){
+                postDatabase.get(child).setParent(-1);
+            }
             postDatabase.remove(postID);
         }
         else{
             throw new PostIDNotRecognisedException("Post ID: " + postID + " not recognised");
         }
-    }
-
-
-
-
-    public void testfunc(){
-        System.out.println("Test Func");
     }
 
     public ArrayList<String> getPostTypes(){
@@ -95,7 +86,21 @@ public class PostDatabase implements Serializable {
         }
         return true;
     }
+
+    public void addCommentToPost(int postID, int commentID){
+        postDatabase.get(postID).addChildren(commentID);
+    }
     public void addEndorsementToPost(int postID, int endorserID){
         postDatabase.get(postID).addEndorsement(endorserID);
+    }
+    public void removeComment(int commentID){
+        for (Map.Entry<Integer, Post> entry : postDatabase.entrySet()) {
+            ArrayList children = entry.getValue().getChildren();
+            // if comment ID is in children array, then remove it and break from loop
+            if (children.contains(commentID)){
+                int postID = entry.getKey();
+                postDatabase.get(postID).removeChildren(commentID);
+            }
+        }
     }
 }

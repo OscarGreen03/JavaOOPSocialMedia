@@ -37,11 +37,11 @@ public class SocialMediaPlatformTestApp {
 		int post2 = platform.createPost("Handle2", "Message2");
 		int post3 = platform.createPost("Handle3", "Message3");
 
-
+		platform.updateAccountDescription("Handle1", "This is the description of Handle1");
 		platform.changeAccountHandle("Handle1", "Handle1New");
-		String hello = platform.showAccount("Handle1");
+		System.out.println(platform.showAccount("Handle1New"));
 
-		System.out.println(hello);
+
 
 
 

@@ -19,8 +19,19 @@ public class socialmedia implements SocialMediaPlatform{
     @Override
     public void removeAccount(int id) throws AccountIDNotRecognisedException, PostIDNotRecognisedException {
         ArrayList<Integer> posts = this.accountDatabase.getPostsForAccount(id);
+        // Deletes all posts for the account
         for (int postID : posts){
+            String postType = this.postDatabase.getPostType(postID);
+            if (postType.equals("p")){
+                this.postDatabase.deletePost(postID);
+            } else if (postType.equals("c")){
+
+                this.postDatabase.removeComment(postID);
+            } else if (postType.equals("e")){
+
+            }
             this.postDatabase.deletePost(postID);
+
         }
 
         this.accountDatabase.removeAccount(id);
@@ -33,6 +44,7 @@ public class socialmedia implements SocialMediaPlatform{
 
     @Override
     public String showAccount(String handle) throws HandleNotRecognisedException {
+        postDatabase.iteratePosts();
         int accountID = this.accountDatabase.getAccountID(handle);
         String description = this.accountDatabase.getDescription(accountID);
         ArrayList<Integer> posts = this.accountDatabase.getPostsForAccount(accountID);
@@ -54,6 +66,7 @@ public class socialmedia implements SocialMediaPlatform{
                 "Handle: " + handle + "\n" +
                 "Description: " + description + "\n" +
                 "Post count: " + postCount + "\n" +
+                "Endorse count: " + "Implement this" + "\n" +
                 "</pre>";
         return formattedString;
                 // need to do endorsement count
@@ -61,7 +74,7 @@ public class socialmedia implements SocialMediaPlatform{
 
     @Override
     public int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException, IllegalHandleException {
-        Post newPost = new Post(handle, message, "c");
+        Post newPost = new Post(handle, message, "p");
         int postID = this.postDatabase.addPost(newPost);
         this.accountDatabase.addPostToAccount(handle, postID);
         return postID;
@@ -86,8 +99,10 @@ public class socialmedia implements SocialMediaPlatform{
     }
 
     @Override
-    public int commentPost(String handle, int id, String message) throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException, InvalidPostException {
+    public int commentPost(String handle, int parentID, String message) throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException, InvalidPostException {
         return 0;
+
+
     }
 
     @Override
