@@ -87,6 +87,7 @@ public class Post implements Serializable {
     }
     public void removeChildren(int childID){
         this.children.remove(childID);
+
     }
     public String getType() {
         //System.out.println("Post Type: " + this.type);
@@ -95,8 +96,14 @@ public class Post implements Serializable {
     public void addEndorsement(int EndorsingAccount){
         this.endorsements.add(EndorsingAccount);
     }
+    public void removeEndorsement(int EndorsingAccount){
+        this.endorsements.remove(EndorsingAccount);
+    }
     public ArrayList getEndorsements(){
         return this.endorsements;
+    }
+    public int getEndorsedID(){
+        return this.parentID;
     }
 
     public void setParent(int id){

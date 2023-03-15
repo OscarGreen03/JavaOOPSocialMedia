@@ -25,10 +25,13 @@ public class socialmedia implements SocialMediaPlatform{
             if (postType.equals("p")){
                 this.postDatabase.deletePost(postID);
             } else if (postType.equals("c")){
+                // comment must first find the post its commenting on and delete it
 
                 this.postDatabase.removeComment(postID);
             } else if (postType.equals("e")){
-
+                int endorsedID = this.postDatabase.getEndorsedID(postID);
+                int accountID = this.accountDatabase.getAccountIDFromPostID(postID);
+                postDatabase.removeEndorsementFromPost(endorsedID, accountID);
             }
             this.postDatabase.deletePost(postID);
 

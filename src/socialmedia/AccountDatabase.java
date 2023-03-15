@@ -113,6 +113,17 @@ public class AccountDatabase implements Serializable {
 
         }
     }
+
+    public int getAccountIDFromPostID(int postID) throws PostIDNotRecognisedException {
+        for (Map.Entry<Integer, Account> entry : accountDatabase.entrySet()) {
+            if (entry.getValue().getPosts().contains(postID)){
+                return entry.getKey();
+            }
+        }
+        throw new PostIDNotRecognisedException("The post ID does not have a corresponding account ID: " + postID);
+    }
+
+
     public void addEndorsementToAccount(String handle, int endorsementID)  {
         int accountID = handleToID.get(handle);
         accountDatabase.get(accountID).addEndorsement(endorsementID);

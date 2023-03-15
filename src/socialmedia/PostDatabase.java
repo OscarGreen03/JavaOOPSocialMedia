@@ -58,10 +58,14 @@ public class PostDatabase implements Serializable {
         // if it isn't then raise PostIDNotRecognisedException
 
         if (postDatabase.containsKey(postID)){
+            // gets array of children and set their parents to -1 (null post)
             ArrayList children = postDatabase.get(postID).getChildren();
-            for (Object child : children){
-                postDatabase.get(child).setParent(-1);
+            if (children.size() > 0){
+                for (Object child : children){
+                    postDatabase.get(child).setParent(-1);
+                }
             }
+
             postDatabase.remove(postID);
         }
         else{
@@ -93,14 +97,24 @@ public class PostDatabase implements Serializable {
     public void addEndorsementToPost(int postID, int endorserID){
         postDatabase.get(postID).addEndorsement(endorserID);
     }
-    public void removeComment(int commentID){
+
+    public void removeComment(int commentID) throws PostIDNotRecognisedException {
         for (Map.Entry<Integer, Post> entry : postDatabase.entrySet()) {
             ArrayList children = entry.getValue().getChildren();
             // if comment ID is in children array, then remove it and break from loop
             if (children.contains(commentID)){
                 int postID = entry.getKey();
                 postDatabase.get(postID).removeChildren(commentID);
+
             }
         }
+        deletePost(commentID);
+    }
+
+    public int getEndorsedID(int postID){
+        return postDatabase.get(postID).getEndorsedID();
+    }
+    public void removeEndorsementFromPost(int postID, int endorserID){
+
     }
 }
