@@ -9,7 +9,7 @@ public class Post implements Serializable {
     private String type;
     private int parentID;
     private ArrayList<Integer> endorsements = new ArrayList<>();
-    private ArrayList<Integer> children;
+    private ArrayList<Integer> children = new ArrayList<>();
         // postid must be valid
         // userid must be valid
         // we can check message
@@ -79,11 +79,18 @@ public class Post implements Serializable {
         return "\nUser Handle: " + this.userHandle + " \nMessage: " + this.message + "\n Type: " + this.type;
     }
 
+    public String getMessage(){
+        return this.message;
+    }
+
     public void addChildren(int childID){
         this.children.add(childID);
     }
     public ArrayList getChildren(){
         return this.children;
+    }
+    public int getChildrenSize(){
+        return getChildren().size();
     }
     public void removeChildren(int childID){
         this.children.remove(childID);
@@ -101,6 +108,10 @@ public class Post implements Serializable {
     }
     public ArrayList getEndorsements(){
         return this.endorsements;
+    }
+
+    public int getEndorsementNum() {
+        return getEndorsements().size();
     }
     public int getEndorsedID(){
         return this.parentID;

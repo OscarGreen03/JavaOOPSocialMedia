@@ -117,4 +117,13 @@ public class PostDatabase implements Serializable {
     public void removeEndorsementFromPost(int postID, int endorserID){
 
     }
+    public int getCommentNum(int postID){
+        return postDatabase.get(postID).getChildrenSize();
+    }
+    public int getEndorsementNum(int postID) {
+        return postDatabase.get(postID).getEndorsementNum();
+    }
+    public String getMessage(int postID){
+        return postDatabase.get(postID).getMessage();
+    }
 }

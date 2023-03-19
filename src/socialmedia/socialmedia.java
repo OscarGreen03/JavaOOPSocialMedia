@@ -102,20 +102,53 @@ public class socialmedia implements SocialMediaPlatform{
     }
 
     @Override
-    public int commentPost(String handle, int parentID, String message) throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException, InvalidPostException {
-        return 0;
+    public int commentPost(String handle, int parentID, String message) throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException, InvalidPostException, IllegalHandleException {
+        // create post object
+        Post newPost = new Post(handle, message, "c", parentID);
+        int postID = postDatabase.addPost(newPost);
+        accountDatabase.addPostToAccount(handle, postID);
+        postDatabase.addCommentToPost(parentID, postID);
+
+
+        return postID;
 
 
     }
 
     @Override
-    public void deletePost(int id) throws PostIDNotRecognisedException {
+    public void deletePost(int postID) throws PostIDNotRecognisedException {
+
+            String postType = this.postDatabase.getPostType(postID);
+            if (postType.equals("p")){
+                this.postDatabase.deletePost(postID);
+            } else if (postType.equals("c")){
+                // comment must first find the post its commenting on and delete it
+
+                this.postDatabase.removeComment(postID);
+            } else if (postType.equals("e")){
+                int endorsedID = this.postDatabase.getEndorsedID(postID);
+                int accountID = this.accountDatabase.getAccountIDFromPostID(postID);
+                postDatabase.removeEndorsementFromPost(endorsedID, accountID);
+            }
+            this.postDatabase.deletePost(postID);
+
 
     }
 
     @Override
     public String showIndividualPost(int id) throws PostIDNotRecognisedException {
-        return null;
+        int accountID = accountDatabase.getAccountIDFromPostID(id);
+        int endorsementNum = postDatabase.getEndorsementNum(id);
+        int commentNum = postDatabase.getCommentNum(id);
+        String message = postDatabase.getMessage(id);
+        String formattedPost =
+                "<pre>\n" +
+                "ID: " + id + "\n" +
+                "Account: " + accountID + "\n" +
+                "No. endorsements: " + endorsementNum + " | No. comments: " + commentNum + "\n" +
+                message + "\n" +
+                "</pre>";
+        return formattedPost;
     }
 
     @Override

@@ -40,7 +40,7 @@ public class SocialMediaPlatformTestApp {
 		platform.updateAccountDescription("Handle1", "This is the description of Handle1");
 		platform.changeAccountHandle("Handle1", "Handle1New");
 		System.out.println(platform.showAccount("Handle1New"));
-
+		System.out.println(platform.showIndividualPost(post4));
 
 
 
