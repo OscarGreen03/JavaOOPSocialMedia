@@ -18,7 +18,7 @@ public class SocialMediaPlatformTestApp {
 	 * 
 	 * @param args not used
 	 */
-	public static void main(String[] args) throws InvalidPostException, IOException, ClassNotFoundException, PostIDNotRecognisedException, IllegalHandleException, InvalidHandleException, HandleNotRecognisedException {
+	public static void main(String[] args) throws InvalidPostException, IOException, ClassNotFoundException, PostIDNotRecognisedException, IllegalHandleException, InvalidHandleException, HandleNotRecognisedException, NotActionablePostException {
 		System.out.println("The system compiled and started the execution...");
 
 		SocialMediaPlatform platform = new socialmedia();
@@ -39,8 +39,17 @@ public class SocialMediaPlatformTestApp {
 
 		platform.updateAccountDescription("Handle1", "This is the description of Handle1");
 		platform.changeAccountHandle("Handle1", "Handle1New");
-		System.out.println(platform.showAccount("Handle1New"));
-		System.out.println(platform.showIndividualPost(post4));
+		//System.out.println(platform.showAccount("Handle1New"));
+		//System.out.println(platform.showIndividualPost(post4));
+		int comment1 = platform.commentPost("Handle2", post4, "Comment to post4");
+		int comment1comment1 = platform.commentPost("Handle3", comment1, "Comment to comment1");
+		System.out.println("Endorsing now");
+		int endorsepost1 = platform.endorsePost("Handle3", post2);
+		int endorsepost2 = platform.endorsePost("Handle2", post2);
+		//System.out.println(platform.showPostChildrenDetails(post4));
+		System.out.println(platform.getMostEndorsedPost());
+
+		System.out.println("End Endorse Test");
 
 
 

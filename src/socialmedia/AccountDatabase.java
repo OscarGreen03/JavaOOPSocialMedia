@@ -39,7 +39,7 @@ public class AccountDatabase implements Serializable {
 
     }
     public Integer createAccount(String handle) throws IllegalHandleException {
-        if (validateHandle(handle)){
+        if (uniqueHandle(handle)){
             int handleID = generateAccountID();
             Account account = new Account(handle, handleID);
             accountDatabase.put(handleID, account);
@@ -65,7 +65,10 @@ public class AccountDatabase implements Serializable {
         return accountDatabase.get(id).getPosts();
 
     }
-    public boolean validateHandle(String handle){
+    public boolean uniqueHandle(String handle){
+        //System.out.println(handle);
+        //System.out.println(handleToID);
+        //System.out.println(handleToID.containsKey(handle));
         if (handleToID.containsKey(handle)){
             return false;
         }
@@ -91,7 +94,7 @@ public class AccountDatabase implements Serializable {
     public void updateHandle(String oldhandle, String newhandle) throws IllegalHandleException {
         if (oldhandle.equals(newhandle)) {
             throw new IllegalHandleException("The new handle is the same as the old handle");
-        }else if (!validateHandle(newhandle)) {
+        }else if (!uniqueHandle(newhandle)) {
             throw new IllegalHandleException("The new handle already exists in the database");
         }else {
         int accountID = handleToID.get(oldhandle);
@@ -127,6 +130,12 @@ public class AccountDatabase implements Serializable {
     public void addEndorsementToAccount(String handle, int endorsementID)  {
         int accountID = handleToID.get(handle);
         accountDatabase.get(accountID).addEndorsement(endorsementID);
+    }
+
+    public void printAllAccounts(){
+        for (Map.Entry<Integer, Account> entry : accountDatabase.entrySet()){
+            System.out.println(entry.getValue().getHandle());
+        }
     }
 
 }

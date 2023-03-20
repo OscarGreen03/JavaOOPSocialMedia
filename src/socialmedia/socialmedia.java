@@ -2,6 +2,8 @@ package socialmedia;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class socialmedia implements SocialMediaPlatform{
     private AccountDatabase accountDatabase = new AccountDatabase();
@@ -85,10 +87,13 @@ public class socialmedia implements SocialMediaPlatform{
 
     @Override
     public int endorsePost(String handle, int parentID) throws HandleNotRecognisedException, PostIDNotRecognisedException, NotActionablePostException, InvalidPostException {
-        if (!accountDatabase.validateHandle(handle)) {
+
+        if (this.accountDatabase.uniqueHandle(handle)) {
+
             throw new HandleNotRecognisedException();
+
         }
-        else if (!postDatabase.validatePostID(parentID)) {
+        else if (!this.postDatabase.validatePostID(parentID)) {
             throw new PostIDNotRecognisedException();
         }
 
@@ -153,12 +158,23 @@ public class socialmedia implements SocialMediaPlatform{
 
     @Override
     public StringBuilder showPostChildrenDetails(int id) throws PostIDNotRecognisedException, NotActionablePostException {
+        StringBuilder postChildren = new StringBuilder();
+        postChildren.append("<pre>\n");
+
+        // for post, get each comment
+        // each comment get comments recursively
+        // get details for comment like in showIndividualPost
+        // add to string builder
+        Map<String, String> commentDetails = this.getCommentDetails(id);
+
+
         return null;
     }
 
     @Override
     public int getMostEndorsedPost() {
-        return 0;
+        int PostID = postDatabase.getMostEndorsedID();
+        return PostID;
     }
 
     @Override
@@ -240,4 +256,18 @@ public class socialmedia implements SocialMediaPlatform{
 
         return count;
     }
+
+    private Map<String, String> getCommentDetails (int id) throws PostIDNotRecognisedException {
+        Map<String, String> commentDetails = new HashMap<>();
+        int accountID = accountDatabase.getAccountIDFromPostID(id);
+        int endorsementNum = postDatabase.getEndorsementNum(id);
+        int commentNum = postDatabase.getCommentNum(id);
+        String message = postDatabase.getMessage(id);
+        commentDetails.put("accountID", Integer.toString(accountID));
+        commentDetails.put("endorsementNum", Integer.toString(endorsementNum));
+        commentDetails.put("commentNum", Integer.toString(commentNum));
+        commentDetails.put("message", message);
+        return commentDetails;
+    }
+
 }

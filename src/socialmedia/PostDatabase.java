@@ -115,8 +115,9 @@ public class PostDatabase implements Serializable {
         return postDatabase.get(postID).getEndorsedID();
     }
     public void removeEndorsementFromPost(int postID, int endorserID){
-
+        postDatabase.get(postID).removeEndorsement(endorserID);
     }
+
     public int getCommentNum(int postID){
         return postDatabase.get(postID).getChildrenSize();
     }
@@ -125,5 +126,23 @@ public class PostDatabase implements Serializable {
     }
     public String getMessage(int postID){
         return postDatabase.get(postID).getMessage();
+    }
+    public ArrayList<Integer> getChildren(int postID){
+        return postDatabase.get(postID).getChildren();
+    }
+    public int getMostEndorsedID(){
+        // iterate through map and find the post with the most endorsements
+        // return the postID
+        int highestEndorsement = -1;
+        int highestEndorsementID = -1;
+        for (Map.Entry<Integer, Post> entry : postDatabase.entrySet()){
+            int endorsementNum = entry.getValue().getEndorsementNum();
+            if (endorsementNum > highestEndorsement){
+                highestEndorsement = endorsementNum;
+                highestEndorsementID = entry.getKey();
+            }
+
+        }
+        return highestEndorsementID;
     }
 }
