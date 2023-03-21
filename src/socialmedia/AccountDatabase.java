@@ -13,19 +13,18 @@ public class AccountDatabase implements Serializable {
     private Integer lastID = 0;
     private Map<String, Integer> handleToID = new HashMap<>();
 
-    public boolean addAccount(Account account) {
+    public int addAccount(Account account) throws IllegalHandleException {
         // generate new account id
         // add account to map
+        if (!uniqueHandle(account.getHandle())){
+            throw new IllegalHandleException("The Handle already exists in the databse");
+        }
         int accountID = generateAccountID();
-        try {
-            accountDatabase.put(accountID, account);
-            handleToID.put(account.getHandle(), accountID);
-            return true;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        accountDatabase.put(accountID, account);
+        handleToID.put(account.getHandle(), accountID);
+        return accountID;
+
+
     }
     private Integer generateAccountID(){
         // check the last string generated (by checking hash map)
@@ -41,7 +40,7 @@ public class AccountDatabase implements Serializable {
     public Integer createAccount(String handle) throws IllegalHandleException {
         if (uniqueHandle(handle)){
             int handleID = generateAccountID();
-            Account account = new Account(handle, handleID);
+            Account account = new Account(handle);
             accountDatabase.put(handleID, account);
             handleToID.put(handle, handleID);
             return handleID;
@@ -78,6 +77,7 @@ public class AccountDatabase implements Serializable {
         return accountDatabase.size();
     }
     public void addPostToAccount(String handle, int postID) throws IllegalHandleException {
+        printHandle2ID();
         int accountID = handleToID.get(handle);
         addPostByID(accountID, postID);
 
@@ -136,6 +136,10 @@ public class AccountDatabase implements Serializable {
         for (Map.Entry<Integer, Account> entry : accountDatabase.entrySet()){
             System.out.println(entry.getValue().getHandle());
         }
+    }
+
+    public void printHandle2ID(){
+        System.out.println(handleToID);
     }
 
 }

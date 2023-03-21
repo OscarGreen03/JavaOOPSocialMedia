@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.*;
 
 public class socialmedia implements SocialMediaPlatform{
     private AccountDatabase accountDatabase = new AccountDatabase();
@@ -15,7 +16,10 @@ public class socialmedia implements SocialMediaPlatform{
 
     @Override
     public int createAccount(String handle) throws IllegalHandleException, InvalidHandleException {
-        return this.accountDatabase.createAccount(handle);
+        Account newAccount = new Account(handle);
+
+        int accountID = this.accountDatabase.addAccount(newAccount);
+        return accountID;
     }
 
     @Override
@@ -116,8 +120,6 @@ public class socialmedia implements SocialMediaPlatform{
 
 
         return postID;
-
-
     }
 
     @Override
@@ -189,22 +191,71 @@ public class socialmedia implements SocialMediaPlatform{
 
     @Override
     public void savePlatform(String filename) throws IOException {
+        SaveFile saveFile = new SaveFile(accountDatabase, postDatabase);
+        try{
+            FileOutputStream fileOut = new FileOutputStream(filename);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(saveFile);
+            out.close();
+            fileOut.close();
 
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
-
+        try{
+            FileInputStream file = new FileInputStream(filename);
+            ObjectInputStream in = new ObjectInputStream(file);
+            SaveFile saveFile = (SaveFile) in.readObject();
+            this.accountDatabase = saveFile.getAccountDatabase();
+            this.postDatabase = saveFile.getPostDatabase();
+            in.close();
+            file.close();
+        } catch (IOException e){
+            e.printStackTrace();
+        } catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int createAccount(String handle, String description) throws IllegalHandleException, InvalidHandleException {
-        return 0;
+        Account newAccount = new Account(handle, description);
+        int accountID = this.accountDatabase.addAccount(newAccount);
+        return accountID;
     }
 
     @Override
-    public void removeAccount(String handle) throws HandleNotRecognisedException {
+    public void removeAccount(String handle) throws HandleNotRecognisedException, PostIDNotRecognisedException {
+        int id;
+        try {
+            id = this.accountDatabase.getAccountID(handle);
+        } catch (HandleNotRecognisedException e) {
+            throw new HandleNotRecognisedException("The handle provided does not exist.");
+        }
+        ArrayList<Integer> posts = this.accountDatabase.getPostsForAccount(id);
+        // Deletes all posts for the account
+        for (int postID : posts) {
+            String postType = this.postDatabase.getPostType(postID);
+            if (postType.equals("p")) {
+                this.postDatabase.deletePost(postID);
+            } else if (postType.equals("c")) {
+                // comment must first find the post its commenting on and delete it
 
+                this.postDatabase.removeComment(postID);
+            } else if (postType.equals("e")) {
+                int endorsedID = this.postDatabase.getEndorsedID(postID);
+                int accountID = this.accountDatabase.getAccountIDFromPostID(postID);
+                postDatabase.removeEndorsementFromPost(endorsedID, accountID);
+            }
+            this.postDatabase.deletePost(postID);
+
+        }
+
+        this.accountDatabase.removeAccount(id);
     }
 
     @Override

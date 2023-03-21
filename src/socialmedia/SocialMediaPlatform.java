@@ -43,7 +43,7 @@ public interface SocialMediaPlatform extends MiniSocialMediaPlatform {
 	 * @throws HandleNotRecognisedException if the handle does not match to any
 	 *                                      account in the system.
 	 */
-	void removeAccount(String handle) throws HandleNotRecognisedException;
+	void removeAccount(String handle) throws HandleNotRecognisedException, PostIDNotRecognisedException;
 
 	/**
 	 * The method updates the description of the account with the respective handle.
