@@ -46,15 +46,16 @@ public class SocialMediaPlatformTestApp {
 		int post1comment3comment1 = platform.commentPost("user1", post1comment3, "This is the example!");
 
 		//platform.erasePlatform();
-		System.out.println(platform.showPostChildrenDetails(1));
-		System.out.println("==================================");
+		System.out.println(platform.showPostChildrenDetails(post1));
+		/*System.out.println("==================================");
 		platform.endorsePost("user1", post1comment1comment1comment1);
 		platform.endorsePost("user2", post1comment1comment1comment1);
 		platform.endorsePost("user3", post1comment1comment1comment1);
 		platform.endorsePost("user4", post1comment1comment1comment1);
 		System.out.println(user2);
 		System.out.println(platform.getMostEndorsedAccount());
-		platform.savePlatform("test2.ser");
+
+		platform.savePlatform("test2.ser");*/
 
 
 

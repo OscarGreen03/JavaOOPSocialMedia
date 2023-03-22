@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.io.*;
 
-public class socialmedia implements SocialMediaPlatform{
+public class socialmedia implements SocialMediaPlatform {
     private AccountDatabase accountDatabase = new AccountDatabase();
     private PostDatabase postDatabase = new PostDatabase();
 
@@ -26,15 +26,15 @@ public class socialmedia implements SocialMediaPlatform{
     public void removeAccount(int id) throws AccountIDNotRecognisedException, PostIDNotRecognisedException {
         ArrayList<Integer> posts = this.accountDatabase.getPostsForAccount(id);
         // Deletes all posts for the account
-        for (int postID : posts){
+        for (int postID : posts) {
             String postType = this.postDatabase.getPostType(postID);
-            if (postType.equals("p")){
+            if (postType.equals("p")) {
                 this.postDatabase.deletePost(postID);
-            } else if (postType.equals("c")){
+            } else if (postType.equals("c")) {
                 // comment must first find the post its commenting on and delete it
 
                 this.postDatabase.removeComment(postID);
-            } else if (postType.equals("e")){
+            } else if (postType.equals("e")) {
                 int endorsedID = this.postDatabase.getEndorsedID(postID);
                 int accountID = this.accountDatabase.getAccountIDFromPostID(postID);
                 postDatabase.removeEndorsementFromPost(endorsedID, accountID);
@@ -57,14 +57,14 @@ public class socialmedia implements SocialMediaPlatform{
         int accountID = this.accountDatabase.getAccountID(handle);
         String description = this.accountDatabase.getDescription(accountID);
         ArrayList<Integer> posts = this.accountDatabase.getPostsForAccount(accountID);
-        ArrayList<String> postTypes = new ArrayList<>();
-        for (int postID : posts){
+        ArrayList<String> postTypes = new ArrayList<String>();
+        for (int postID : posts) {
             postTypes.add(this.postDatabase.getPostType(postID));
         }
         int postCount = posts.size();
         int endorsementCount = 0;
-        for (String postType : postTypes){
-            if(postType.equals("e")){
+        for (String postType : postTypes) {
+            if (postType.equals("e")) {
                 endorsementCount++;
             }
         }
@@ -78,7 +78,7 @@ public class socialmedia implements SocialMediaPlatform{
                 "Endorse count: " + "Implement this" + "\n" +
                 "</pre>";
         return formattedString;
-                // need to do endorsement count
+        // need to do endorsement count
     }
 
     @Override
@@ -96,8 +96,7 @@ public class socialmedia implements SocialMediaPlatform{
 
             throw new HandleNotRecognisedException();
 
-        }
-        else if (!this.postDatabase.validatePostID(parentID)) {
+        } else if (!this.postDatabase.validatePostID(parentID)) {
             throw new PostIDNotRecognisedException();
         }
 
@@ -125,19 +124,19 @@ public class socialmedia implements SocialMediaPlatform{
     @Override
     public void deletePost(int postID) throws PostIDNotRecognisedException {
 
-            String postType = this.postDatabase.getPostType(postID);
-            if (postType.equals("p")){
-                this.postDatabase.deletePost(postID);
-            } else if (postType.equals("c")){
-                // comment must first find the post its commenting on and delete it
-
-                this.postDatabase.removeComment(postID);
-            } else if (postType.equals("e")){
-                int endorsedID = this.postDatabase.getEndorsedID(postID);
-                int accountID = this.accountDatabase.getAccountIDFromPostID(postID);
-                postDatabase.removeEndorsementFromPost(endorsedID, accountID);
-            }
+        String postType = this.postDatabase.getPostType(postID);
+        if (postType.equals("p")) {
             this.postDatabase.deletePost(postID);
+        } else if (postType.equals("c")) {
+            // comment must first find the post its commenting on and delete it
+
+            this.postDatabase.removeComment(postID);
+        } else if (postType.equals("e")) {
+            int endorsedID = this.postDatabase.getEndorsedID(postID);
+            int accountID = this.accountDatabase.getAccountIDFromPostID(postID);
+            postDatabase.removeEndorsementFromPost(endorsedID, accountID);
+        }
+        this.postDatabase.deletePost(postID);
 
 
     }
@@ -150,45 +149,20 @@ public class socialmedia implements SocialMediaPlatform{
         String message = postDatabase.getMessage(id);
         String formattedPost =
                 "<pre>\n" +
-                "ID: " + id + "\n" +
-                "Account: " + accountID + "\n" +
-                "No. endorsements: " + endorsementNum + " | No. comments: " + commentNum + "\n" +
-                message + "\n" +
-                "</pre>";
+                        "ID: " + id + "\n" +
+                        "Account: " + accountID + "\n" +
+                        "No. endorsements: " + endorsementNum + " | No. comments: " + commentNum + "\n" +
+                        message + "\n" +
+                        "</pre>";
         return formattedPost;
     }
 
     @Override
     public StringBuilder showPostChildrenDetails(int id) throws PostIDNotRecognisedException, NotActionablePostException {
         StringBuilder stb = new StringBuilder();
-        ArrayList<Integer> Children = postDatabase.getPost(id).getChildren();
-        ArrayList<Integer> Visited = new ArrayList<>();
-        Visited.add(id);
-        ArrayList<Integer> Stack = new ArrayList<>();
-        boolean NoChildren = false;
-        for(int i = 0;i < Children.size();i++){
-            if(postDatabase.getPost(Children.get(i)).getChildrenSize() != 0){
-                Stack.addAll(postDatabase.getPost(Children.get(i)).getChildren());
-            }
-            Visited.add(Children.get(i));
-            int finalItem = 1;
-            while(!Stack.isEmpty()){
-                Visited.add(Stack.get(0));//Pre-Order traversal
-                if(postDatabase.getPost(Stack.get(0)).getChildrenSize() != 0){
-                    Stack.addAll(postDatabase.getPost(Stack.get(0)).getChildren());
-                    finalItem = Stack.get(0);
-                }
-                Stack.remove(0);
-            }
-        }System.out.println(Visited);
-        for (int i = 0; i < Visited.size()-1; i++){
-            if(i != 0 && (postDatabase.getPost(Visited.get(i)).getParentID() == Visited.get(i-1))){
-                stb.append("\t"+this.showIndividualPost(Visited.get(i)).replace("\n","\n \t"));
-            }else{
-                stb.append(this.showIndividualPost(Visited.get(i)));
-            }
-            stb.append("\n");
-        }
+        stb.append("<pre>\n");
+        stb = postTree(id, 0, stb);
+        stb.append("</pre>");
         return stb;
     }
 
@@ -205,8 +179,8 @@ public class socialmedia implements SocialMediaPlatform{
         // find the account with the highest value
         int max = 0;
         String maxHandle = "";
-        for (String handle : accountEndorsements.keySet()){
-            if (accountEndorsements.get(handle) >= max){
+        for (String handle : accountEndorsements.keySet()) {
+            if (accountEndorsements.get(handle) >= max) {
                 max = accountEndorsements.get(handle);
                 maxHandle = handle;
             }
@@ -228,21 +202,21 @@ public class socialmedia implements SocialMediaPlatform{
     @Override
     public void savePlatform(String filename) throws IOException {
         SaveFile saveFile = new SaveFile(accountDatabase, postDatabase);
-        try{
+        try {
             FileOutputStream fileOut = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(saveFile);
             out.close();
             fileOut.close();
 
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
-        try{
+        try {
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
             SaveFile saveFile = (SaveFile) in.readObject();
@@ -250,9 +224,9 @@ public class socialmedia implements SocialMediaPlatform{
             this.postDatabase = saveFile.getPostDatabase();
             in.close();
             file.close();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -296,7 +270,7 @@ public class socialmedia implements SocialMediaPlatform{
 
     @Override
     public void updateAccountDescription(String handle, String description) throws IllegalHandleException {
-            this.accountDatabase.updateAccountDescription(handle, description);
+        this.accountDatabase.updateAccountDescription(handle, description);
     }
 
     @Override
@@ -309,8 +283,8 @@ public class socialmedia implements SocialMediaPlatform{
         ArrayList<String> postTypes = this.postDatabase.getPostTypes();
         //System.out.println(postTypes);
         int count = 0;
-        for (String postType : postTypes){
-            if (postType.equals("p")){
+        for (String postType : postTypes) {
+            if (postType.equals("p")) {
                 count++;
             }
         }
@@ -322,8 +296,8 @@ public class socialmedia implements SocialMediaPlatform{
     public int getTotalEndorsmentPosts() {
         ArrayList<String> postTypes = this.postDatabase.getPostTypes();
         int count = 0;
-        for (String postType : postTypes){
-            if (postType.equals("e")){
+        for (String postType : postTypes) {
+            if (postType.equals("e")) {
                 count++;
             }
         }
@@ -335,8 +309,8 @@ public class socialmedia implements SocialMediaPlatform{
     public int getTotalCommentPosts() {
         ArrayList<String> postTypes = this.postDatabase.getPostTypes();
         int count = 0;
-        for (String postType : postTypes){
-            if (postType.equals("c")){
+        for (String postType : postTypes) {
+            if (postType.equals("c")) {
                 count++;
             }
         }
@@ -344,17 +318,57 @@ public class socialmedia implements SocialMediaPlatform{
         return count;
     }
 
-    private Map<String, String> getCommentDetails (int id) throws PostIDNotRecognisedException {
-        Map<String, String> commentDetails = new HashMap<>();
+    private Map<String, Object> getPostDetails(int id) throws PostIDNotRecognisedException {
+        Map<String, Object> postDetails = new HashMap<String, Object>();
         int accountID = accountDatabase.getAccountIDFromPostID(id);
         int endorsementNum = postDatabase.getEndorsementNum(id);
         int commentNum = postDatabase.getCommentNum(id);
         String message = postDatabase.getMessage(id);
-        commentDetails.put("accountID", Integer.toString(accountID));
-        commentDetails.put("endorsementNum", Integer.toString(endorsementNum));
-        commentDetails.put("commentNum", Integer.toString(commentNum));
-        commentDetails.put("message", message);
-        return commentDetails;
+        ArrayList<Integer> children = postDatabase.getChildren(id);
+        postDetails.put("accountID", accountID);
+        postDetails.put("endorsementNum", Integer.toString(endorsementNum));
+        postDetails.put("commentNum", Integer.toString(commentNum));
+        postDetails.put("message", message);
+        postDetails.put("children", children);
+
+        return postDetails;
+    }
+
+    private StringBuilder postTree(int id, int depth, StringBuilder stb) throws PostIDNotRecognisedException {
+        // recursively get children of post in postTree
+        // get post details
+        Map<String, Object> postDetails = getPostDetails(id);
+        ArrayList children = (ArrayList) postDetails.get("children");
+        String spacing = new String(new char[depth]).replace("\0", "\t");
+
+        if (depth != 0) {
+            // remove last character from string
+            String firstSpacing = spacing.substring(0, spacing.length() - 1);
+            stb.append(firstSpacing + "|\n" + firstSpacing + "| > ");
+        }
+
+        stb.append("ID: " + id + "\n");
+        stb.append(spacing);
+        stb.append("Account: " + accountDatabase.getHandle((int) postDetails.get("accountID")) + "\n");
+        stb.append(spacing);
+        stb.append("No. endorsements: " + postDetails.get("endorsementNum") + " | " + "No. comments: " + postDetails.get("commentNum") + "\n");
+        stb.append(spacing);
+        stb.append(postDetails.get("message") + "\n");
+
+
+        if (children.size() != 0) {
+            for (int i = 0; i < children.size(); i++) {
+                int child = (int) children.get(i);
+                stb = postTree(child, depth + 1, stb);
+            }
+            // no children so append to string
+
+
+
+
+
+        }
+        return stb;
     }
 
 }

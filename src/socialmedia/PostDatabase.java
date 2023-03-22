@@ -1,5 +1,5 @@
 package socialmedia;
-import java.io.Serial;
+//import java.io.Serial;
 import java.io.Serializable;
 
 // java map import
@@ -10,9 +10,9 @@ import java.util.HashMap;
 
 
 public class PostDatabase implements Serializable {
-    @Serial
+    //@Serial
     private static final long serialVersionUID = 245345;
-    public Map<Integer, Post> postDatabase = new HashMap<>();
+    public Map<Integer, Post> postDatabase = new HashMap<Integer, Post>();
     private Integer lastID = 0;
     public PostDatabase() {
         Post nullPost = new Post();
@@ -154,7 +154,7 @@ public class PostDatabase implements Serializable {
     }
 
     public HashMap endorsementCountPerHandle(){
-        HashMap<String, Integer> accountEndorsements = new HashMap<>();
+        HashMap<String, Integer> accountEndorsements = new HashMap<String, Integer>();
         for (Map.Entry<Integer, Post> entry : postDatabase.entrySet()){
             int endorsementNum = entry.getValue().getEndorsementNum();
             String handle = entry.getValue().getHandle();

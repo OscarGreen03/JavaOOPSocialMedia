@@ -1,17 +1,17 @@
 package socialmedia;
 
-import java.io.Serial;
+//import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 
 public class AccountDatabase implements Serializable {
-    @Serial
+    //@Serial
     private static final long serialVersionUID = 983484;
-    private Map<Integer, Account> accountDatabase = new HashMap<>();
+    private Map<Integer, Account> accountDatabase = new HashMap<Integer, Account>();
     private Integer lastID = 0;
-    private Map<String, Integer> handleToID = new HashMap<>();
+    private Map<String, Integer> handleToID = new HashMap<String, Integer>();
 
     public int addAccount(Account account) throws IllegalHandleException {
         // generate new account id
@@ -141,6 +141,10 @@ public class AccountDatabase implements Serializable {
 
     public void printHandle2ID(){
         System.out.println(handleToID);
+    }
+
+    public String getHandle(int id){
+        return accountDatabase.get(id).getHandle();
     }
 
 }

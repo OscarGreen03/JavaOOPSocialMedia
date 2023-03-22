@@ -8,8 +8,8 @@ public class Post implements Serializable {
     private String message;
     private String type;
     private int parentID;
-    private ArrayList<Integer> endorsements = new ArrayList<>();
-    private ArrayList<Integer> children = new ArrayList<>();
+    private ArrayList<Integer> endorsements = new ArrayList<Integer>();
+    private ArrayList<Integer> children = new ArrayList<Integer>();
         // postid must be valid
         // userid must be valid
         // we can check message

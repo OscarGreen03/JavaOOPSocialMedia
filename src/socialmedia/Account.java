@@ -7,9 +7,9 @@ public class Account implements Serializable {
     private String handle;
     private String description;
     private int id;
-    private ArrayList<Integer> posts = new ArrayList<>();
+    private ArrayList<Integer> posts = new ArrayList<Integer>();
 
-    private ArrayList<Integer> endorsedAccounts = new ArrayList<>();
+    private ArrayList<Integer> endorsedAccounts = new ArrayList<Integer>();
 
     public Account(String handle, String description) {
         this.handle = handle;

@@ -1,11 +1,11 @@
 package socialmedia;
 
-import java.io.Serial;
+//import java.io.Serial;
 import java.io.Serializable;
 
 public class SaveFile implements Serializable {
     // needed to stop a random serial being generated, using random serial for now
-    @Serial
+    //@Serial
     private static final long serialVersionUID = -839483944;
 
     private AccountDatabase accountDatabase;
