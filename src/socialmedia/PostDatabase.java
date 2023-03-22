@@ -14,7 +14,7 @@ public class PostDatabase implements Serializable {
     private static final long serialVersionUID = 245345;
     public Map<Integer, Post> postDatabase = new HashMap<>();
     private Integer lastID = 0;
-    public PostDatabase() throws InvalidPostException {
+    public PostDatabase() {
         Post nullPost = new Post();
         postDatabase.put(-1, nullPost);
     }
@@ -144,5 +144,27 @@ public class PostDatabase implements Serializable {
 
         }
         return highestEndorsementID;
+    }
+    public Post getPost(int id) throws PostIDNotRecognisedException {
+        Post post = postDatabase.get(id);
+        if (post == null){
+            throw new PostIDNotRecognisedException("Post ID '" + id + "' not recognised");
+        }
+        return post;
+    }
+
+    public HashMap endorsementCountPerHandle(){
+        HashMap<String, Integer> accountEndorsements = new HashMap<>();
+        for (Map.Entry<Integer, Post> entry : postDatabase.entrySet()){
+            int endorsementNum = entry.getValue().getEndorsementNum();
+            String handle = entry.getValue().getHandle();
+            if (accountEndorsements.containsKey(handle)){
+                accountEndorsements.put(handle, accountEndorsements.get(handle) + endorsementNum);
+            }
+            else{
+                accountEndorsements.put(handle, endorsementNum);
+            }
+        }
+        return accountEndorsements;
     }
 }

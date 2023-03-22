@@ -291,7 +291,7 @@ public interface MiniSocialMediaPlatform extends Serializable {
 	 * 
 	 * @return the ID of the most popular account.
 	 */
-	int getMostEndorsedAccount();
+	int getMostEndorsedAccount() throws HandleNotRecognisedException;
 
 	// End Analytics-related methods ****************************************
 

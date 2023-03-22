@@ -160,17 +160,36 @@ public class socialmedia implements SocialMediaPlatform{
 
     @Override
     public StringBuilder showPostChildrenDetails(int id) throws PostIDNotRecognisedException, NotActionablePostException {
-        StringBuilder postChildren = new StringBuilder();
-        postChildren.append("<pre>\n");
-
-        // for post, get each comment
-        // each comment get comments recursively
-        // get details for comment like in showIndividualPost
-        // add to string builder
-        Map<String, String> commentDetails = this.getCommentDetails(id);
-
-
-        return null;
+        StringBuilder stb = new StringBuilder();
+        ArrayList<Integer> Children = postDatabase.getPost(id).getChildren();
+        ArrayList<Integer> Visited = new ArrayList<>();
+        Visited.add(id);
+        ArrayList<Integer> Stack = new ArrayList<>();
+        boolean NoChildren = false;
+        for(int i = 0;i < Children.size();i++){
+            if(postDatabase.getPost(Children.get(i)).getChildrenSize() != 0){
+                Stack.addAll(postDatabase.getPost(Children.get(i)).getChildren());
+            }
+            Visited.add(Children.get(i));
+            int finalItem = 1;
+            while(!Stack.isEmpty()){
+                Visited.add(Stack.get(0));//Pre-Order traversal
+                if(postDatabase.getPost(Stack.get(0)).getChildrenSize() != 0){
+                    Stack.addAll(postDatabase.getPost(Stack.get(0)).getChildren());
+                    finalItem = Stack.get(0);
+                }
+                Stack.remove(0);
+            }
+        }System.out.println(Visited);
+        for (int i = 0; i < Visited.size()-1; i++){
+            if(i != 0 && (postDatabase.getPost(Visited.get(i)).getParentID() == Visited.get(i-1))){
+                stb.append("\t"+this.showIndividualPost(Visited.get(i)).replace("\n","\n \t"));
+            }else{
+                stb.append(this.showIndividualPost(Visited.get(i)));
+            }
+            stb.append("\n");
+        }
+        return stb;
     }
 
     @Override
@@ -180,12 +199,29 @@ public class socialmedia implements SocialMediaPlatform{
     }
 
     @Override
-    public int getMostEndorsedAccount() {
-        return 0;
+    public int getMostEndorsedAccount() throws HandleNotRecognisedException {
+        // hashmap containing handle, and total endorsements as value (int)
+        HashMap<String, Integer> accountEndorsements = postDatabase.endorsementCountPerHandle();
+        // find the account with the highest value
+        int max = 0;
+        String maxHandle = "";
+        for (String handle : accountEndorsements.keySet()){
+            if (accountEndorsements.get(handle) >= max){
+                max = accountEndorsements.get(handle);
+                maxHandle = handle;
+            }
+
+        }
+        return accountDatabase.getAccountID(maxHandle);
     }
 
     @Override
     public void erasePlatform() {
+
+        // unsure if this is deleting .ser file but no harm in overwriting it if this function is called
+        // however don't get filename
+        this.accountDatabase = new AccountDatabase();
+        this.postDatabase = new PostDatabase();
 
     }
 

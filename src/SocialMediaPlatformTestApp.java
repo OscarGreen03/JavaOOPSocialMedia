@@ -27,32 +27,34 @@ public class SocialMediaPlatformTestApp {
 
 
 		//postDatabase.iteratePosts();
-		platform.loadPlatform("testfile.ser");
-		platform.commentPost("Handle1New", 1, "Comment to post1");
-		System.out.println(platform.showIndividualPost(1));
-		int handle1 = platform.createAccount("Handle5");
-		int handle2 = platform.createAccount("Handle26");
-		int handle3 = platform.createAccount("Handle36");
+		//platform.loadPlatform("testfile.ser");
+		//platform.commentPost("Handle1New", 1, "Comment to post1");
+		//System.out.println(platform.showIndividualPost(1));
+		int user1 = platform.createAccount("user1");
+		int post1 = platform.createPost("user1", "I like examples.");
 
-		//int post1 = platform.createPost("Handle1", "Message1");
-		//int post4 = platform.createPost("Handle1", "Message4");
-		int post2 = platform.createPost("Handle2", "Message2");
-		int post3 = platform.createPost("Handle3", "Message3");
+		int user2 = platform.createAccount("user2");
+		int post1comment1 = platform.commentPost("user2", post1, "No more than me...");
+		int post1comment1comment1 = platform.commentPost("user1", post1comment1, "I can prove!");
+		int post1comment1comment1comment1 = platform.commentPost("user2", post1comment1comment1, "prove it");
 
-		//platform.updateAccountDescription("Handle1", "This is the description of Handle1");
-		//platform.changeAccountHandle("Handle1", "Handle1New");
-		//System.out.println(platform.showAccount("Handle1New"));
-		//System.out.println(platform.showIndividualPost(post4));
-		int comment1 = platform.commentPost("Handle2", 1, "Comment to post4");
-		int comment1comment1 = platform.commentPost("Handle3", comment1, "Comment to comment1");
-		System.out.println("Endorsing now");
-		int endorsepost1 = platform.endorsePost("Handle3", post2);
-		int endorsepost2 = platform.endorsePost("Handle2", post2);
-		//System.out.println(platform.showPostChildrenDetails(post4));
-		System.out.println(platform.getMostEndorsedPost());
+		int user3 = platform.createAccount("user3");
+		int post1comment2 = platform.commentPost("user3", post1, "Can't you do better than this?");
 
-		System.out.println("End Endorse Test");
-		platform.savePlatform("testfile.ser");
+		int user4 = platform.createAccount("user4");
+		int post1comment3 = platform.commentPost("user4", post1, "where is the example?");
+		int post1comment3comment1 = platform.commentPost("user1", post1comment3, "This is the example!");
+
+		//platform.erasePlatform();
+		System.out.println(platform.showPostChildrenDetails(1));
+		System.out.println("==================================");
+		platform.endorsePost("user1", post1comment1comment1comment1);
+		platform.endorsePost("user2", post1comment1comment1comment1);
+		platform.endorsePost("user3", post1comment1comment1comment1);
+		platform.endorsePost("user4", post1comment1comment1comment1);
+		System.out.println(user2);
+		System.out.println(platform.getMostEndorsedAccount());
+		platform.savePlatform("test2.ser");
 
 
 

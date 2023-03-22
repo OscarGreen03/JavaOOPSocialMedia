@@ -120,5 +120,12 @@ public class Post implements Serializable {
     public void setParent(int id){
         this.parentID = id;
     }
+    public int getParentID(){
+        return this.parentID;
+    }
+
+    public String getHandle(){
+        return this.userHandle;
+    }
 }
 

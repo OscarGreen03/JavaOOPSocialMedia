@@ -78,9 +78,14 @@ public class AccountDatabase implements Serializable {
     }
     public void addPostToAccount(String handle, int postID) throws IllegalHandleException {
         printHandle2ID();
-        int accountID = handleToID.get(handle);
-        addPostByID(accountID, postID);
-
+        try {
+            int accountID = handleToID.get(handle);
+            addPostByID(accountID, postID);
+        }
+        catch (Exception e){
+            System.out.println(e);
+            throw new IllegalHandleException("The handle does not have a corresponding ID");
+        }
     }
 
     public void addPostByID(int accountID, int postID){
@@ -132,11 +137,7 @@ public class AccountDatabase implements Serializable {
         accountDatabase.get(accountID).addEndorsement(endorsementID);
     }
 
-    public void printAllAccounts(){
-        for (Map.Entry<Integer, Account> entry : accountDatabase.entrySet()){
-            System.out.println(entry.getValue().getHandle());
-        }
-    }
+
 
     public void printHandle2ID(){
         System.out.println(handleToID);
