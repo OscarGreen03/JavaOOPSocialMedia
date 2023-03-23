@@ -77,7 +77,7 @@ public class AccountDatabase implements Serializable {
         return accountDatabase.size();
     }
     public void addPostToAccount(String handle, int postID) throws IllegalHandleException {
-        printHandle2ID();
+
         try {
             int accountID = handleToID.get(handle);
             addPostByID(accountID, postID);
@@ -124,7 +124,9 @@ public class AccountDatabase implements Serializable {
 
     public int getAccountIDFromPostID(int postID) throws PostIDNotRecognisedException {
         for (Map.Entry<Integer, Account> entry : accountDatabase.entrySet()) {
+            System.out.println("Account Posts: " + entry.getValue().getPosts());
             if (entry.getValue().getPosts().contains(postID)){
+
                 return entry.getKey();
             }
         }
@@ -134,14 +136,23 @@ public class AccountDatabase implements Serializable {
 
     public void addEndorsementToAccount(String handle, int endorsementID)  {
         int accountID = handleToID.get(handle);
+        System.out.println("Account ID: " + accountID);
+        System.out.println("Endorsement ID: " + endorsementID);
         accountDatabase.get(accountID).addEndorsement(endorsementID);
     }
 
 
+    public int getAccountIDFromEndorsement(int postID) throws PostIDNotRecognisedException {
+        for (Map.Entry<Integer, Account> entry : accountDatabase.entrySet()) {
+            System.out.println("Account Endorsements: " + entry.getValue().getEndorsedAccounts());
+            if (entry.getValue().getEndorsedAccounts().contains(postID)){
 
-    public void printHandle2ID(){
-        System.out.println(handleToID);
+                return entry.getKey();
+            }
+        }
+        throw new PostIDNotRecognisedException("The post ID does not have a corresponding account ID: " + postID);
     }
+
 
     public String getHandle(int id){
         return accountDatabase.get(id).getHandle();

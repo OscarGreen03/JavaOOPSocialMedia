@@ -93,7 +93,10 @@ public class Post implements Serializable {
         return getChildren().size();
     }
     public void removeChildren(int childID){
-        this.children.remove(childID);
+        // get index position of childID
+        // remove childID from children
+        int indexPos = this.children.indexOf(childID);
+        this.children.remove(indexPos);
 
     }
     public String getType() {

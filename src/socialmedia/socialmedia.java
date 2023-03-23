@@ -105,7 +105,9 @@ public class socialmedia implements SocialMediaPlatform {
         // endorsements work by adding the postID of the endorsement to the post being endorsed
         postDatabase.addEndorsementToPost(parentID, endorsementID);
         // endorsements also add the endorsed postID to the account that made the endorsement
-        accountDatabase.addEndorsementToAccount(handle, parentID);
+        // need to add the endorsedID to the account
+
+        accountDatabase.addEndorsementToAccount(handle, endorsementID);
         return endorsementID;
     }
 
@@ -125,18 +127,25 @@ public class socialmedia implements SocialMediaPlatform {
     public void deletePost(int postID) throws PostIDNotRecognisedException {
 
         String postType = this.postDatabase.getPostType(postID);
+
         if (postType.equals("p")) {
             this.postDatabase.deletePost(postID);
+
         } else if (postType.equals("c")) {
             // comment must first find the post its commenting on and delete it
 
             this.postDatabase.removeComment(postID);
         } else if (postType.equals("e")) {
             int endorsedID = this.postDatabase.getEndorsedID(postID);
-            int accountID = this.accountDatabase.getAccountIDFromPostID(postID);
+            System.out.println("endorsedID: " + endorsedID);
+
+            // gets the account that endorsed the post
+            int accountID = this.accountDatabase.getAccountIDFromEndorsement(postID);
+            System.out.println("accountID: " + accountID);
+
             postDatabase.removeEndorsementFromPost(endorsedID, accountID);
         }
-        this.postDatabase.deletePost(postID);
+        //this.postDatabase.deletePost(postID);
 
 
     }

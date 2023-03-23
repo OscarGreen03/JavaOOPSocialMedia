@@ -59,6 +59,7 @@ public class Account implements Serializable {
         endorsedAccounts.add(id);
     }
     public ArrayList<Integer> getEndorsedAccounts(){
+
         return this.endorsedAccounts;
     }
 

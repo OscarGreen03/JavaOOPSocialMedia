@@ -22,7 +22,7 @@ public class SocialMediaPlatformTestApp {
 		System.out.println("The system compiled and started the execution...");
 
 		SocialMediaPlatform platform = new socialmedia();
-
+		/*
 		//Scanner scanner = new Scanner(System.in);
 
 
@@ -30,23 +30,49 @@ public class SocialMediaPlatformTestApp {
 		//platform.loadPlatform("testfile.ser");
 		//platform.commentPost("Handle1New", 1, "Comment to post1");
 		//System.out.println(platform.showIndividualPost(1));
+		*/
+
+
+
+		//platform.erasePlatform();
 		int user1 = platform.createAccount("user1");
 		int post1 = platform.createPost("user1", "I like examples.");
 
 		int user2 = platform.createAccount("user2");
 		int post1comment1 = platform.commentPost("user2", post1, "No more than me...");
+		int post1endorse1 = platform.endorsePost("user2", post1);
 		int post1comment1comment1 = platform.commentPost("user1", post1comment1, "I can prove!");
 		int post1comment1comment1comment1 = platform.commentPost("user2", post1comment1comment1, "prove it");
+		int post1comment1comment1comment1comment1 = platform.commentPost("user1", post1comment1comment1comment1, "Okay, here's the proof");
+		int post1comment1comment1comment1comment1comment1 = platform.commentPost("user2", post1comment1comment1comment1comment1, "Interesting, tell me more");
 
 		int user3 = platform.createAccount("user3");
-		int post1comment2 = platform.commentPost("user3", post1, "Can't you do better than this?");
+		int post2 = platform.createPost("user3", "I have a question.");
+		int post2comment1 = platform.commentPost("user2", post2, "What's your question?");
+		int post2comment1comment1 = platform.commentPost("user3", post2comment1, "My question is about programming languages.");
+		int post2comment1comment1comment1 = platform.commentPost("user1", post2comment1comment1, "What do you want to know?");
+		int post2comment1comment1comment1comment1 = platform.commentPost("user3", post2comment1comment1comment1, "Which programming language is the best?");
 
 		int user4 = platform.createAccount("user4");
-		int post1comment3 = platform.commentPost("user4", post1, "where is the example?");
-		int post1comment3comment1 = platform.commentPost("user1", post1comment3, "This is the example!");
+		int post3 = platform.createPost("user4", "I just finished my project!");
 
-		//platform.erasePlatform();
+
+		int endorse1 = platform.endorsePost("user1", post1);
+		int endorse2 = platform.endorsePost("user1", post1);
+
+
+
+		//System.out.println(platform.showPostChildrenDetails(post1));
+		//System.out.println(platform.showIndividualPost(post1comment1comment1comment1));
+		//platform.deletePost(post1comment1comment1comment1);
 		System.out.println(platform.showPostChildrenDetails(post1));
+		System.out.println(endorse2);
+		platform.deletePost(endorse2);
+		System.out.println(platform.showPostChildrenDetails(post1));
+
+
+
+
 		/*System.out.println("==================================");
 		platform.endorsePost("user1", post1comment1comment1comment1);
 		platform.endorsePost("user2", post1comment1comment1comment1);
