@@ -114,10 +114,10 @@ public class SocialMediaPlatformTestApp {
 
 	}
 	// class that runs the functions imported
-	public static void run() {
+	public static void run() throws InvalidPostException {
 		System.out.println("The system compiled and started the execution...");
 
-		SocialMediaPlatform platform = new BadSocialMedia();
+		SocialMediaPlatform platform = new socialmedia();
 
 		// test the number of accounts
 		assert (platform.getNumberOfAccounts() == 0) : "Innitial SocialMediaPlatform not empty as required.";
@@ -131,38 +131,6 @@ public class SocialMediaPlatformTestApp {
 
 	}
 
-	private static void serializeDatabase(PostDatabase postDatabase) throws IOException {
-		try {
-			FileOutputStream file = new FileOutputStream("postDatabase.ser");
-			ObjectOutputStream out = new ObjectOutputStream(file);
 
-			out.writeObject(postDatabase);
-			out.close();
-			file.close();
-			System.out.println("Object has been serialized");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	private static PostDatabase getDatabase() throws IOException, ClassNotFoundException, InvalidPostException {
-		try{
-			FileInputStream file = new FileInputStream("postDatabase.ser");
-			ObjectInputStream in = new ObjectInputStream(file);
-			PostDatabase postDatabase = (PostDatabase) in.readObject();
-
-			in.close();
-			file.close();
-
-			return postDatabase;
-		}
-		catch (FileNotFoundException e){
-			System.out.println("File not found, Creating new database");
-			return new PostDatabase();
-		}
-
-
-	}
 }
 

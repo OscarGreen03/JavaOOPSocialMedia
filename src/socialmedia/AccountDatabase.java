@@ -64,6 +64,10 @@ public class AccountDatabase implements Serializable {
         return accountDatabase.get(id).getPosts();
 
     }
+
+    public void removePostFromAccount(int accountID, int postID){
+        accountDatabase.get(accountID).removePost(postID);
+    }
     public boolean uniqueHandle(String handle){
         //System.out.println(handle);
         //System.out.println(handleToID);

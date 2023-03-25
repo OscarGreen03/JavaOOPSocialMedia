@@ -85,6 +85,7 @@ public class PostDatabase implements Serializable {
         return postDatabase.get(id).getType();
     }
     public boolean validatePostID(int id) throws PostIDNotRecognisedException {
+        // validateID checks if the postID already exists
         if (!postDatabase.containsKey(id)) {
             return false;
         }

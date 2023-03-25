@@ -51,6 +51,10 @@ public class Account implements Serializable {
         posts.add(id);
     }
 
+    public void removePost(int id){
+        posts.remove(id);
+    }
+
     public ArrayList<Integer> getPosts() {
         return this.posts;
     }

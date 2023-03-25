@@ -7,6 +7,8 @@ import java.util.Map;
 import java.io.*;
 
 public class socialmedia implements SocialMediaPlatform {
+    // declares and creates a new AccountDatabase and PostDatabase
+    // when loading from save file, these will be replaced with the saved versions
     private AccountDatabase accountDatabase = new AccountDatabase();
     private PostDatabase postDatabase = new PostDatabase();
 
@@ -26,14 +28,18 @@ public class socialmedia implements SocialMediaPlatform {
     public void removeAccount(int id) throws AccountIDNotRecognisedException, PostIDNotRecognisedException {
         ArrayList<Integer> posts = this.accountDatabase.getPostsForAccount(id);
         // Deletes all posts for the account
+        // each posttype has to be handled differently to prevent unexpected behaviour
         for (int postID : posts) {
             String postType = this.postDatabase.getPostType(postID);
             if (postType.equals("p")) {
+                // post can be deleted directly
                 this.postDatabase.deletePost(postID);
+                this.accountDatabase.removePostFromAccount(id, postID);
             } else if (postType.equals("c")) {
                 // comment must first find the post its commenting on and delete it
 
                 this.postDatabase.removeComment(postID);
+                this.accountDatabase.removePostFromAccount(id, postID);
             } else if (postType.equals("e")) {
                 int endorsedID = this.postDatabase.getEndorsedID(postID);
                 int accountID = this.accountDatabase.getAccountIDFromPostID(postID);
@@ -53,7 +59,7 @@ public class socialmedia implements SocialMediaPlatform {
 
     @Override
     public String showAccount(String handle) throws HandleNotRecognisedException {
-        postDatabase.iteratePosts();
+        //postDatabase.iteratePosts();
         int accountID = this.accountDatabase.getAccountID(handle);
         String description = this.accountDatabase.getDescription(accountID);
         ArrayList<Integer> posts = this.accountDatabase.getPostsForAccount(accountID);
@@ -83,8 +89,11 @@ public class socialmedia implements SocialMediaPlatform {
 
     @Override
     public int createPost(String handle, String message) throws HandleNotRecognisedException, InvalidPostException, IllegalHandleException {
+        // creates a new post object
         Post newPost = new Post(handle, message, "p");
+        // adds the post to the post database
         int postID = this.postDatabase.addPost(newPost);
+        // adds the postID to the account posting
         this.accountDatabase.addPostToAccount(handle, postID);
         return postID;
     }
@@ -168,8 +177,11 @@ public class socialmedia implements SocialMediaPlatform {
 
     @Override
     public StringBuilder showPostChildrenDetails(int id) throws PostIDNotRecognisedException, NotActionablePostException {
+        // create stringbuilder
         StringBuilder stb = new StringBuilder();
         stb.append("<pre>\n");
+        // pass into recursive method (works on any depth, comments or posts)
+        // (depth automatically 0)
         stb = postTree(id, 0, stb);
         stb.append("</pre>");
         return stb;
@@ -202,7 +214,8 @@ public class socialmedia implements SocialMediaPlatform {
     public void erasePlatform() {
 
         // unsure if this is deleting .ser file but no harm in overwriting it if this function is called
-        // however don't get filename
+        // however don't get filename, so just replace with new blank objects.
+        // leaves each instance of previously saved platform untouhed
         this.accountDatabase = new AccountDatabase();
         this.postDatabase = new PostDatabase();
 
@@ -210,7 +223,10 @@ public class socialmedia implements SocialMediaPlatform {
 
     @Override
     public void savePlatform(String filename) throws IOException {
+        // adds both objects to a save file object
         SaveFile saveFile = new SaveFile(accountDatabase, postDatabase);
+
+        // standard serialisation code
         try {
             FileOutputStream fileOut = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -225,10 +241,12 @@ public class socialmedia implements SocialMediaPlatform {
 
     @Override
     public void loadPlatform(String filename) throws IOException, ClassNotFoundException {
+        // standard deserialisation code
         try {
             FileInputStream file = new FileInputStream(filename);
             ObjectInputStream in = new ObjectInputStream(file);
             SaveFile saveFile = (SaveFile) in.readObject();
+            // sets the account and post databases to the ones in the save file
             this.accountDatabase = saveFile.getAccountDatabase();
             this.postDatabase = saveFile.getPostDatabase();
             in.close();
@@ -265,7 +283,9 @@ public class socialmedia implements SocialMediaPlatform {
                 // comment must first find the post its commenting on and delete it
 
                 this.postDatabase.removeComment(postID);
+
             } else if (postType.equals("e")) {
+                // endorsement must first find the post its endorsing and delete it
                 int endorsedID = this.postDatabase.getEndorsedID(postID);
                 int accountID = this.accountDatabase.getAccountIDFromPostID(postID);
                 postDatabase.removeEndorsementFromPost(endorsedID, accountID);
@@ -292,6 +312,7 @@ public class socialmedia implements SocialMediaPlatform {
         ArrayList<String> postTypes = this.postDatabase.getPostTypes();
         //System.out.println(postTypes);
         int count = 0;
+        // count the number of posts with type "p" (aka actual posts)
         for (String postType : postTypes) {
             if (postType.equals("p")) {
                 count++;
@@ -305,6 +326,7 @@ public class socialmedia implements SocialMediaPlatform {
     public int getTotalEndorsmentPosts() {
         ArrayList<String> postTypes = this.postDatabase.getPostTypes();
         int count = 0;
+        // same as getTotalOriginalPosts but for endorsements
         for (String postType : postTypes) {
             if (postType.equals("e")) {
                 count++;
@@ -318,6 +340,7 @@ public class socialmedia implements SocialMediaPlatform {
     public int getTotalCommentPosts() {
         ArrayList<String> postTypes = this.postDatabase.getPostTypes();
         int count = 0;
+        // same as getTotalOriginalPosts but for comments could really just have one function tbh (do if i have time and alex actually does a single line of code)
         for (String postType : postTypes) {
             if (postType.equals("c")) {
                 count++;
@@ -328,12 +351,16 @@ public class socialmedia implements SocialMediaPlatform {
     }
 
     private Map<String, Object> getPostDetails(int id) throws PostIDNotRecognisedException {
+        // get post details from post database, mimics the showIndividualPost function but as a datatype
+        // creates an StringxObject map as i get multiple types of data
         Map<String, Object> postDetails = new HashMap<String, Object>();
         int accountID = accountDatabase.getAccountIDFromPostID(id);
         int endorsementNum = postDatabase.getEndorsementNum(id);
         int commentNum = postDatabase.getCommentNum(id);
         String message = postDatabase.getMessage(id);
         ArrayList<Integer> children = postDatabase.getChildren(id);
+
+        // add all the data to the map
         postDetails.put("accountID", accountID);
         postDetails.put("endorsementNum", Integer.toString(endorsementNum));
         postDetails.put("commentNum", Integer.toString(commentNum));
@@ -348,6 +375,7 @@ public class socialmedia implements SocialMediaPlatform {
         // get post details
         Map<String, Object> postDetails = getPostDetails(id);
         ArrayList children = (ArrayList) postDetails.get("children");
+        // creates spacing by creating string of empty length "depth" and replacing all the empty spaces with tabs
         String spacing = new String(new char[depth]).replace("\0", "\t");
 
         if (depth != 0) {
@@ -355,7 +383,7 @@ public class socialmedia implements SocialMediaPlatform {
             String firstSpacing = spacing.substring(0, spacing.length() - 1);
             stb.append(firstSpacing + "|\n" + firstSpacing + "| > ");
         }
-
+        // for each post append the details to the string with the spacing
         stb.append("ID: " + id + "\n");
         stb.append(spacing);
         stb.append("Account: " + accountDatabase.getHandle((int) postDetails.get("accountID")) + "\n");
@@ -364,7 +392,7 @@ public class socialmedia implements SocialMediaPlatform {
         stb.append(spacing);
         stb.append(postDetails.get("message") + "\n");
 
-
+        // if there are children then recursively call the function for each child
         if (children.size() != 0) {
             for (int i = 0; i < children.size(); i++) {
                 int child = (int) children.get(i);
@@ -372,11 +400,8 @@ public class socialmedia implements SocialMediaPlatform {
             }
             // no children so append to string
 
-
-
-
-
         }
+        // return the stb to the previous call
         return stb;
     }
 
