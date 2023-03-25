@@ -35,9 +35,9 @@ public class SocialMediaPlatformTestApp {
 
 
 		//platform.erasePlatform();
-		int user1 = platform.createAccount("user1");
+		int user1 = platform.createAccount("user1", "I like describing myself.");
 		int post1 = platform.createPost("user1", "I like examples.");
-
+		int endorse4 = platform.endorsePost("user1", post1);
 		int user2 = platform.createAccount("user2");
 		int post1comment1 = platform.commentPost("user2", post1, "No more than me...");
 		int post1endorse1 = platform.endorsePost("user2", post1);
@@ -65,11 +65,11 @@ public class SocialMediaPlatformTestApp {
 		//System.out.println(platform.showPostChildrenDetails(post1));
 		//System.out.println(platform.showIndividualPost(post1comment1comment1comment1));
 		//platform.deletePost(post1comment1comment1comment1);
-		System.out.println(platform.showPostChildrenDetails(post1));
+		//System.out.println(platform.showPostChildrenDetails(post1));
 		System.out.println(endorse2);
 		platform.deletePost(endorse2);
-		System.out.println(platform.showPostChildrenDetails(post1));
-
+		//System.out.println(platform.showPostChildrenDetails(post1));
+		System.out.println(platform.showAccount("user1"));
 
 
 

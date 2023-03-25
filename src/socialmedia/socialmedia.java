@@ -69,10 +69,14 @@ public class socialmedia implements SocialMediaPlatform {
         }
         int postCount = posts.size();
         int endorsementCount = 0;
-        for (String postType : postTypes) {
-            if (postType.equals("e")) {
-                endorsementCount++;
-            }
+
+
+
+
+        for (Integer post : posts) {
+            // for each post, get post object
+            int endorseCount = this.postDatabase.getEndorsementNum(post);
+            endorsementCount += endorseCount;
         }
 
 
@@ -81,7 +85,7 @@ public class socialmedia implements SocialMediaPlatform {
                 "Handle: " + handle + "\n" +
                 "Description: " + description + "\n" +
                 "Post count: " + postCount + "\n" +
-                "Endorse count: " + "Implement this" + "\n" +
+                "Endorse count: " + endorsementCount + "\n" +
                 "</pre>";
         return formattedString;
         // need to do endorsement count
